@@ -19,7 +19,7 @@ connectDB();
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(cors({ 
-  origin: process.env.CLIENT_URL || '*', 
+  origin: [process.env.CLIENT_URL, 'https://mantra-shopping.netlify.app'].filter(Boolean), 
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
