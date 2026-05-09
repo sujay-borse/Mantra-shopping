@@ -41,10 +41,11 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// POST /api/auth/google
 router.post('/google', async (req, res) => {
   try {
     const { idToken, role } = req.body;
+    console.log(`Google Auth Request - Role: ${role}`); // DEBUG LOG
+    
     if (!idToken) return res.status(400).json({ error: 'idToken is required' });
     if (!admin) return res.status(500).json({ error: 'Firebase Admin SDK not configured on server' });
 
@@ -53,6 +54,7 @@ router.post('/google', async (req, res) => {
 
     let user = await User.findOne({ email });
     if (!user) {
+      console.log(`Creating new user: ${email} with role: ${role}`); // DEBUG LOG
       user = await User.create({
         name: name || 'Google User',
         email,
@@ -61,10 +63,13 @@ router.post('/google', async (req, res) => {
         role: role || 'user',
         isVerified: true
       });
-    } else if (!user.googleId) {
-      user.googleId = uid;
-      if (!user.avatar) user.avatar = picture;
-      await user.save();
+    } else {
+      console.log(`Existing user found: ${email}, current role: ${user.role}`); // DEBUG LOG
+      if (!user.googleId) {
+        user.googleId = uid;
+        if (!user.avatar) user.avatar = picture;
+        await user.save();
+      }
     }
 
     user.lastLogin = new Date();
@@ -74,7 +79,7 @@ router.post('/google', async (req, res) => {
     res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, avatar: user.avatar, membership: user.membership } });
   } catch (err) {
     console.error('Google Auth Error:', err);
-    res.status(401).json({ error: 'Invalid Google token' });
+    res.status(401).json({ error: 'Invalid Google token or database error' });
   }
 });
 

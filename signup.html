@@ -186,7 +186,8 @@
             window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'home.html';
           }, 1200);
         } else {
-          showToast(data.error || 'Google signup failed', 'error');
+          showToast(data.error || 'Google signup failed (Role issue?)', 'error');
+          console.error('Signup error data:', data);
         }
       } catch (error) {
         console.error(error);

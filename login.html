@@ -164,7 +164,8 @@
             window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'home.html';
           }, 1000);
         } else {
-          showToast(data.error || 'Google login failed', 'error');
+          showToast(data.error || 'Google login failed (Role issue?)', 'error');
+          console.error('Login error data:', data);
         }
       } catch (error) {
         console.error(error);
