@@ -190,7 +190,7 @@
         }
       } catch (error) {
         console.error(error);
-        showToast('Google signup failed or was cancelled.', 'error');
+        showToast('Google signup failed: ' + (error.code || error.message), 'error');
       }
     };
   </script>
