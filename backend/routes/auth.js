@@ -65,10 +65,14 @@ router.post('/google', async (req, res) => {
       });
     } else {
       console.log(`Existing user found: ${email}, current role: ${user.role}`); // DEBUG LOG
+      // Update role if user explicitly chose a different one during this login
+      if (role && user.role !== role) {
+        console.log(`Updating role from ${user.role} to ${role}`);
+        user.role = role;
+      }
       if (!user.googleId) {
         user.googleId = uid;
         if (!user.avatar) user.avatar = picture;
-        await user.save();
       }
     }
 
