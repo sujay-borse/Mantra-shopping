@@ -168,7 +168,7 @@
         }
       } catch (error) {
         console.error(error);
-        showToast('Google login failed or was cancelled.', 'error');
+        showToast('Google login failed: ' + (error.code || error.message), 'error');
       }
     };
   </script>
