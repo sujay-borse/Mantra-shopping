@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin & Win | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+  <style>
+    body { background: var(--bg); }
+    .spin-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--navbar-h) + 32px) 20px 40px;
+      text-align: center;
+    }
+    .spin-title { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 900; margin-bottom: 8px; }
+    .spin-sub { color: var(--text-muted); margin-bottom: 40px; font-size: 1rem; }
+    .spin-container {
+      position: relative;
+      width: min(380px, 90vw);
+      height: min(380px, 90vw);
+      margin: 0 auto 40px;
+    }
+    #spinCanvas { border-radius: 50%; display: block; }
+    .spin-pointer {
+      position: absolute;
+      top: -20px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem; color: var(--primary);
+      filter: drop-shadow(0 2px 8px rgba(255,62,108,0.5));
+      z-index: 2;
+    }
+    .spin-center {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .spin-center-btn {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      background: var(--white);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800;
+      color: var(--primary); letter-spacing: 0.5px;
+      cursor: pointer; pointer-events: all;
+      transition: transform 0.2s;
+      border: 3px solid var(--primary);
+    }
+    .spin-center-btn:hover { transform: scale(1.07); }
+    .spin-center-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .spin-info {
+      display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 32px;
+    }
+    .spin-info-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 24px;
+      min-width: 140px;
+    }
+    .spin-info-card .val { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+    .spin-info-card .lbl { font-size: 0.8125rem; color: var(--text-muted); margin-top: 2px; }
+    .reward-history { max-width: 480px; width: 100%; margin-top: 8px; }
+    .reward-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; background: var(--white);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      margin-bottom: 8px; font-size: 0.9375rem;
+    }
+    .reward-item .code { font-weight: 700; color: var(--primary); font-family: monospace; }
+    /* Win Modal */
+    .win-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: 0.3s;
+    }
+    .win-overlay.show { opacity: 1; visibility: visible; }
+    .win-modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      text-align: center;
+      max-width: 380px; width: 90%;
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .win-overlay.show .win-modal { transform: scale(1); }
+    .win-emoji { font-size: 4rem; margin-bottom: 12px; }
+    .win-label { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; }
+    .win-code {
+      background: var(--bg); border: 2px dashed var(--primary);
+      border-radius: var(--radius-sm); padding: 12px 20px;
+      font-size: 1.25rem; font-weight: 900; font-family: monospace;
+      color: var(--primary); letter-spacing: 2px; margin: 20px 0;
+    }
+    /* Confetti */
+    .confetti-piece {
+      position: fixed; width: 10px; height: 10px;
+      z-index: 99999; pointer-events: none;
+      animation: confettiFall 3s ease-in forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    [data-theme="dark"] .spin-info-card,
+    [data-theme="dark"] .win-modal,
+    [data-theme="dark"] .reward-item { background: #1a1a2e; border-color: rgba(255,255,255,0.08); }
+    [data-theme="dark"] .spin-center-btn { background: #1a1a2e; }
+    [data-theme="dark"] .win-code { background: #0d0d1a; }
+  </style>
+</head>
+<body>
+  <div class="spin-page">
+    <h1 class="spin-title">🎡 Spin & Win</h1>
+    <p class="spin-sub">Spin the wheel daily for exclusive rewards, discounts & mystery gifts!</p>
+
+    <div class="spin-container">
+      <div class="spin-pointer"><i class="fa-solid fa-caret-down"></i></div>
+      <canvas id="spinCanvas"></canvas>
+      <div class="spin-center">
+        <button class="spin-center-btn" id="spinBtn">SPIN!</button>
+      </div>
+    </div>
+
+    <div class="spin-info">
+      <div class="spin-info-card">
+        <div class="val" id="spinsLeft">1</div>
+        <div class="lbl">Spins left today</div>
+      </div>
+      <div class="spin-info-card">
+        <div class="val" id="totalRewards">0</div>
+        <div class="lbl">Rewards earned</div>
+      </div>
+    </div>
+
+    <div class="reward-history" id="rewardHistory"></div>
+  </div>
+
+  <!-- Win Modal -->
+  <div class="win-overlay" id="winOverlay">
+    <div class="win-modal">
+      <div class="win-emoji" id="winEmoji">🎉</div>
+      <div class="win-label" id="winLabel">You Won!</div>
+      <p id="winDesc" style="color:var(--text-muted); margin-bottom:0;"></p>
+      <div class="win-code" id="winCode"></div>
+      <button class="btn btn-primary btn-full" onclick="closeWin()">Claim Reward 🎁</button>
+      <button class="btn btn-outline btn-full" style="margin-top:10px;" onclick="closeWin()">Maybe Later</button>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/spin-wheel.js"></script>
+</body>
+</html>

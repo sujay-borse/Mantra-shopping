@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">Mantra<span style="color:var(--accent)">.</span></div>
+      <p class="auth-subtitle">Welcome back! Sign in to continue.</p>
+
+      <!-- Role Selection -->
+      <div id="roleStep">
+        <div style="display:flex;gap:12px;margin-bottom:24px;">
+          <div class="role-card" id="roleUser" onclick="selectRole('user')">
+            <i class="fa-solid fa-user"></i>
+            <h3>Customer</h3>
+            <p>Shop the latest fashion & lifestyle</p>
+          </div>
+          <div class="role-card" id="roleSeller" onclick="selectRole('seller')">
+            <i class="fa-solid fa-store"></i>
+            <h3>Seller</h3>
+            <p>Manage your store & grow sales</p>
+          </div>
+        </div>
+        <div id="roleError" style="color:var(--error);font-size:0.8125rem;margin-bottom:12px;display:none;">Please select a role to continue.</div>
+        <button class="btn btn-primary btn-full" onclick="proceedToForm()">Continue</button>
+      </div>
+
+      <!-- Login Form (hidden initially) -->
+      <div id="loginStep" style="display:none;">
+        <div id="selectedRoleBadge" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--primary-light);border-radius:var(--radius-sm);margin-bottom:20px;font-size:0.875rem;font-weight:600;color:var(--primary);">
+          <i class="fa-solid fa-user"></i> <span id="roleBadgeText">Customer</span>
+          <button onclick="backToRole()" style="margin-left:auto;font-size:0.75rem;color:var(--text-muted);background:none;border:none;cursor:pointer;">Change</button>
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" required placeholder="Enter your email">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="input-wrap">
+              <input type="password" class="form-control" id="password" required placeholder="••••••••">
+              <i class="fa-regular fa-eye password-toggle" onclick="togglePwd()"></i>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-size:0.875rem;">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--primary);"> Remember me
+            </label>
+            <a href="forgot-password.html" style="color:var(--primary);font-weight:600;">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full btn-lg">Sign In</button>
+        </form>
+
+        <div class="auth-divider">or continue with</div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="googleLogin()">
+            <i class="fa-brands fa-google text-xl" style="color:#DB4437"></i> Google
+          </button>
+          <button class="social-btn" onclick="showToast('Facebook login coming soon','info')">
+            <i class="fa-brands fa-facebook text-xl" style="color:#4267B2"></i> Facebook
+          </button>
+        </div>
+
+        <div class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    let selectedRole = null;
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('role' + (role === 'user' ? 'User' : 'Seller')).classList.add('selected');
+      document.getElementById('roleError').style.display = 'none';
+    }
+
+    function proceedToForm() {
+      if (!selectedRole) { document.getElementById('roleError').style.display = 'block'; return; }
+      document.getElementById('roleStep').style.display = 'none';
+      document.getElementById('loginStep').style.display = 'block';
+      const icons = { user: 'fa-user', seller: 'fa-store' };
+      document.getElementById('selectedRoleBadge').querySelector('i').className = `fa-solid ${icons[selectedRole]}`;
+      document.getElementById('roleBadgeText').textContent = selectedRole === 'user' ? 'Customer' : 'Seller';
+    }
+
+    function backToRole() {
+      document.getElementById('loginStep').style.display = 'none';
+      document.getElementById('roleStep').style.display = 'block';
+    }
+
+    function togglePwd() {
+      const input = document.getElementById('password');
+      const icon = document.querySelector('.password-toggle');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    }
+
+    // Removed inline googleLogin function. Handled by module script below.
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (Store.auth.isLoggedIn()) {
+        const user = Store.auth.user();
+        window.location.href = user?.role === 'seller' ? 'seller-dashboard.html' : 'profile.html';
+        return;
+      }
+
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const pwd = document.getElementById('password').value;
+        if (pwd.length < 6) { showToast('Password must be at least 6 characters', 'error'); return; }
+        const name = email.split('@')[0];
+        Store.auth.login(name, email, selectedRole || 'user');
+        showToast(`Welcome back, ${name}!`);
+        const redirect = new URLSearchParams(window.location.search).get('redirect');
+        setTimeout(() => {
+          window.location.href = selectedRole === 'seller'
+            ? 'seller-dashboard.html'
+            : (redirect || 'home.html');
+        }, 1000);
+      });
+    });
+  </script>
+  <script type="module">
+    import { signInWithGoogle } from './js/firebase-auth.js';
+    window.googleLogin = async function() {
+      if (!selectedRole) { 
+        document.getElementById('roleError').style.display = 'block'; 
+        return; 
+      }
+      try {
+        showToast('Connecting to Google...', 'info');
+        const { idToken } = await signInWithGoogle();
+        
+        // Send token to backend
+        const response = await fetch('http://localhost:5000/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken, role: selectedRole })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          Store.auth.login(data.user.name, data.user.email, data.user.role, data.token);
+          showToast('Google login successful!');
+          setTimeout(() => {
+            window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'home.html';
+          }, 1000);
+        } else {
+          showToast(data.error || 'Google login failed', 'error');
+        }
+      } catch (error) {
+        console.error(error);
+        showToast('Google login failed or was cancelled.', 'error');
+      }
+    };
+  </script>
+</body>
+</html>

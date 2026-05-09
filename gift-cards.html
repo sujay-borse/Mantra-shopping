@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gift Cards | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+</head>
+<body class="pt-navbar bg-bg">
+  
+  <div class="container section">
+    <div style="text-align:center; margin-bottom:48px;">
+      <h1 class="mb-2" style="font-size:2.5rem;">Give the Gift of Style</h1>
+      <p class="text-muted" style="font-size:1.125rem;">The perfect present for any occasion. Delivered instantly via email.</p>
+    </div>
+    
+    <div class="grid grid-cols-3 gap-6" style="max-width:900px; margin:0 auto;">
+      
+      <!-- Gift Card ₹1000 -->
+      <div style="background:var(--white); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); text-align:center;">
+        <div style="height:160px; background:linear-gradient(135deg, var(--secondary), var(--primary)); display:flex; align-items:center; justify-content:center;">
+          <h2 style="color:var(--white); font-size:2rem;">₹1,000</h2>
+        </div>
+        <div style="padding:24px;">
+          <h3 class="mb-4">Standard E-Gift Card</h3>
+          <button class="btn btn-outline btn-full" onclick="addGiftCard(1000)">Add to Bag</button>
+        </div>
+      </div>
+      
+      <!-- Gift Card ₹2500 -->
+      <div style="background:var(--white); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); text-align:center;">
+        <div style="height:160px; background:linear-gradient(135deg, var(--primary), var(--accent)); display:flex; align-items:center; justify-content:center;">
+          <h2 style="color:var(--white); font-size:2rem;">₹2,500</h2>
+        </div>
+        <div style="padding:24px;">
+          <h3 class="mb-4">Premium E-Gift Card</h3>
+          <button class="btn btn-primary btn-full" onclick="addGiftCard(2500)">Add to Bag</button>
+        </div>
+      </div>
+      
+      <!-- Gift Card ₹5000 -->
+      <div style="background:var(--white); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); text-align:center;">
+        <div style="height:160px; background:linear-gradient(135deg, var(--secondary-light), var(--success)); display:flex; align-items:center; justify-content:center;">
+          <h2 style="color:var(--white); font-size:2rem;">₹5,000</h2>
+        </div>
+        <div style="padding:24px;">
+          <h3 class="mb-4">Luxury E-Gift Card</h3>
+          <button class="btn btn-outline-dark btn-full" onclick="addGiftCard(5000)">Add to Bag</button>
+        </div>
+      </div>
+
+    </div>
+    
+    <div style="max-width:900px; margin:48px auto 0; text-align:center;">
+      <h3 class="mb-3">How it works</h3>
+      <p class="text-secondary text-sm">Select a value and add the E-Gift Card to your bag. After successful payment, the E-Gift Card code will be emailed to you instantly. You can then forward it to the recipient or print it out.</p>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  
+  <script>
+    function addGiftCard(amount) {
+      const p = {
+        id: 'GIFT' + amount,
+        name: `Mantra E-Gift Card (₹${amount})`,
+        brand: 'Mantra',
+        price: amount,
+        original: amount,
+        img: 'https://source.unsplash.com/400x400/?gift,present', // placeholder
+        cat: 'gifts',
+        size: 'Digital'
+      };
+      
+      Store.cart.add(p, 1, 'Digital');
+      showToast(`₹${amount} Gift Card added to bag!`);
+    }
+  </script>
+</body>
+</html>
+

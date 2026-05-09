@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+</head>
+<body class="pt-navbar bg-bg">
+  
+  <div class="container section" style="max-width:600px;">
+    <div style="background:var(--white); padding:40px; border-radius:var(--radius-md); box-shadow:var(--shadow-sm); text-align:center;">
+      <i class="fa-solid fa-box-open text-primary mb-4" style="font-size:3rem;"></i>
+      <h1 class="mb-2" style="font-size:1.5rem;">Track Your Order</h1>
+      <p class="text-muted mb-6">Enter your Order ID and Email Address to track the current status of your shipment.</p>
+      
+      <form id="trackForm" class="text-left">
+        <div class="form-group">
+          <label class="form-label">Order ID</label>
+          <input type="text" class="form-control" id="orderId" required placeholder="e.g. ORD123456">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="orderEmail" required placeholder="Email used during checkout">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full mt-4">Track Order</button>
+      </form>
+      
+      <div id="trackResult" class="mt-6 text-left" style="display:none; padding:20px; border:1px solid var(--border); border-radius:var(--radius-sm);">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  
+  <script>
+    document.getElementById('trackForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('orderId').value.trim();
+      
+      // Look up in store
+      const orders = Store.orders.list();
+      const order = orders.find(o => o.id === id);
+      
+      const res = document.getElementById('trackResult');
+      res.style.display = 'block';
+      
+      if (order) {
+        res.innerHTML = `
+          <h4 class="mb-2">Order Status: <span class="text-primary">${order.status}</span></h4>
+          <p class="text-sm text-secondary mb-1">Order Date: ${new Date(order.date).toLocaleDateString()}</p>
+          <p class="text-sm text-secondary">Expected Delivery: Standard delivery applies.</p>
+          <div class="mt-4"><a href="profile.html" class="btn btn-outline btn-sm">View Details</a></div>
+        `;
+      } else {
+        res.innerHTML = `
+          <div class="text-error"><i class="fa-solid fa-circle-exclamation"></i> Order not found. Please check your Order ID and try again.</div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
+

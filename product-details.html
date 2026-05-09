@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body class="pt-navbar">
+  
+  <div class="breadcrumb container">
+    <a href="home.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="#" id="bcCat">Category</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current" id="bcName">Product</span>
+  </div>
+
+  <div class="pd-layout">
+    <!-- Gallery -->
+    <div class="pd-gallery">
+      <div class="pd-main-img" id="mainImgWrap">
+        <img src="" id="mainImg" alt="Product Image">
+      </div>
+      <div class="pd-thumbnails" id="thumbnails">
+        <!-- Injected -->
+      </div>
+    </div>
+    
+    <!-- Info -->
+    <div class="pd-info">
+      <div class="pd-brand" id="pdBrand">Brand</div>
+      <h1 class="pd-name" id="pdName">Product Name</h1>
+      
+      <div class="product-card-rating">
+        <div class="stars" id="pdStars"></div>
+        <span class="rating-count" id="pdRatingCount"></span>
+      </div>
+      
+      <div class="pd-divider"></div>
+      
+      <div class="pd-price-row">
+        <div class="pd-price" id="pdPrice">₹0</div>
+        <div class="pd-original" id="pdOriginal">₹0</div>
+        <div class="pd-discount" id="pdDiscount">0% OFF</div>
+        <div style="width:100%; font-size:0.8125rem; color:var(--success); font-weight:600; margin-top:-8px;">Inclusive of all taxes</div>
+      </div>
+      
+      <div class="pd-divider"></div>
+      
+      <div class="pd-label">Select Size</div>
+      <div class="size-options" id="sizeOptions">
+        <button class="size-btn">S</button>
+        <button class="size-btn active">M</button>
+        <button class="size-btn">L</button>
+        <button class="size-btn">XL</button>
+        <button class="size-btn disabled">XXL</button>
+      </div>
+      
+      <div class="pd-label" style="margin-top:20px;">Quantity</div>
+      <div class="qty-control">
+        <button class="qty-btn" id="qtyMinus">-</button>
+        <div class="qty-value" id="qtyVal">1</div>
+        <button class="qty-btn" id="qtyPlus">+</button>
+      </div>
+      
+      <div class="pd-actions">
+        <button class="btn btn-primary" id="btnAddToCart">
+          <i class="fa-solid fa-bag-shopping"></i> Add to Bag
+        </button>
+        <button class="btn btn-outline" id="btnWishlist">
+          <i class="fa-regular fa-heart"></i> Wishlist
+        </button>
+      </div>
+      
+      <div class="delivery-info">
+        <div class="pd-label">Delivery Options</div>
+        <div class="delivery-row">
+          <i class="fa-solid fa-truck-fast"></i> <span>Get it by <strong id="delDate"></strong></span>
+        </div>
+        <div class="delivery-row">
+          <i class="fa-solid fa-money-bill-wave"></i> <span>Pay on delivery available</span>
+        </div>
+        <div class="delivery-row">
+          <i class="fa-solid fa-arrow-rotate-left"></i> <span>Easy 14 days return & exchange</span>
+        </div>
+      </div>
+      
+      <div class="pd-divider"></div>
+      
+      <div class="pd-label">Product Details</div>
+      <p style="font-size:0.9375rem; color:var(--text-secondary); line-height:1.7;">
+        Premium quality fabric crafted to perfection. This comfortable and stylish piece is a must-have for your wardrobe. Machine wash cold, tumble dry low. Do not bleach.
+      </p>
+    </div>
+  </div>
+
+  <!-- Related / Recently Viewed -->
+  <section class="section bg-white" style="border-top:1px solid var(--border); margin-top:40px;">
+    <div class="container">
+      <div class="section-title text-center mb-6">Similar Products</div>
+      <div class="grid grid-cols-5 gap-4" id="relatedContainer"></div>
+    </div>
+  </section>
+
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('id');
+      
+      if (!productId) {
+        window.location.href = 'home.html';
+        return;
+      }
+      
+      const product = getProduct(productId);
+      if (!product) {
+        window.location.href = 'home.html';
+        return;
+      }
+      
+      // Track recently viewed
+      Store.recentlyViewed.add(product);
+      
+      // Populate Data
+      document.getElementById('bcCat').textContent = CATEGORIES.find(c => c.id === product.cat)?.name || product.cat;
+      document.getElementById('bcCat').href = `${product.cat}.html`;
+      document.getElementById('bcName').textContent = product.name;
+      
+      document.getElementById('pdBrand').textContent = product.brand;
+      document.getElementById('pdName').textContent = product.name;
+      
+      // Prices
+      document.getElementById('pdPrice').textContent = `₹${product.price}`;
+      if (product.original > product.price) {
+        document.getElementById('pdOriginal').textContent = `₹${product.original}`;
+        const discount = Math.round(((product.original - product.price) / product.original) * 100);
+        document.getElementById('pdDiscount').textContent = `(${discount}% OFF)`;
+      } else {
+        document.getElementById('pdOriginal').style.display = 'none';
+        document.getElementById('pdDiscount').style.display = 'none';
+      }
+      
+      // Images
+      document.getElementById('mainImg').src = product.img;
+      const thumbsHTML = [product.img, product.img+'?t=1', product.img+'?t=2', product.img+'?t=3'].map((img, i) => `
+        <div class="pd-thumb ${i===0?'active':''}" onclick="changeImg(this, '${img}')">
+          <img src="${img}">
+        </div>
+      `).join('');
+      document.getElementById('thumbnails').innerHTML = thumbsHTML;
+      
+      // Ratings
+      let starsHTML = '';
+      for(let i=1; i<=5; i++) {
+        if (i <= Math.floor(product.rating)) starsHTML += '<i class="fa-solid fa-star"></i>';
+        else if (i === Math.ceil(product.rating) && !Number.isInteger(product.rating)) starsHTML += '<i class="fa-solid fa-star-half-stroke"></i>';
+        else starsHTML += '<i class="fa-solid fa-star empty"></i>';
+      }
+      starsHTML += ` <span style="color:var(--text); font-weight:700; margin-left:4px;">${product.rating}</span>`;
+      document.getElementById('pdStars').innerHTML = starsHTML;
+      document.getElementById('pdRatingCount').textContent = `| ${product.count} Ratings`;
+      
+      // Delivery Date (Add 3 days)
+      const d = new Date();
+      d.setDate(d.getDate() + 3);
+      document.getElementById('delDate').textContent = d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+      
+      // Interactive controls
+      let selectedSize = 'M';
+      let selectedQty = 1;
+      
+      document.querySelectorAll('.size-btn:not(.disabled)').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedSize = btn.textContent;
+        });
+      });
+      
+      document.getElementById('qtyMinus').addEventListener('click', () => {
+        if (selectedQty > 1) {
+          selectedQty--;
+          document.getElementById('qtyVal').textContent = selectedQty;
+        }
+      });
+      
+      document.getElementById('qtyPlus').addEventListener('click', () => {
+        if (selectedQty < 5) {
+          selectedQty++;
+          document.getElementById('qtyVal').textContent = selectedQty;
+        } else {
+          showToast('Max limit 5 per order', 'warning');
+        }
+      });
+      
+      // Actions
+      document.getElementById('btnAddToCart').addEventListener('click', () => {
+        addToCart(product.id, selectedQty, selectedSize);
+      });
+      
+      const isWishlisted = Store.wishlist.has(product.id);
+      const btnWishlist = document.getElementById('btnWishlist');
+      if (isWishlisted) {
+        btnWishlist.classList.add('active');
+        btnWishlist.innerHTML = '<i class="fa-solid fa-heart" style="color:var(--primary)"></i> Wishlisted';
+      }
+      btnWishlist.addEventListener('click', () => {
+        toggleWishlist(product.id, btnWishlist);
+        if (btnWishlist.classList.contains('active')) {
+          btnWishlist.innerHTML = '<i class="fa-solid fa-heart" style="color:var(--primary)"></i> Wishlisted';
+        } else {
+          btnWishlist.innerHTML = '<i class="fa-regular fa-heart"></i> Wishlist';
+        }
+      });
+      
+      // Related
+      const related = getProductsByCategory(product.cat).filter(p => p.id !== product.id).slice(0, 5);
+      renderProductsGrid('relatedContainer', related);
+      
+      // Zoom effect
+      const imgWrap = document.getElementById('mainImgWrap');
+      const img = document.getElementById('mainImg');
+      imgWrap.addEventListener('mousemove', e => {
+        const rect = imgWrap.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width * 100;
+        const y = (e.clientY - rect.top) / rect.height * 100;
+        img.style.transformOrigin = `${x}% ${y}%`;
+        img.style.transform = 'scale(2)';
+      });
+      imgWrap.addEventListener('mouseleave', () => {
+        img.style.transformOrigin = 'center center';
+        img.style.transform = 'scale(1)';
+      });
+    });
+    
+    function changeImg(el, src) {
+      document.getElementById('mainImg').src = src;
+      document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>

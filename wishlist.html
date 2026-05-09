@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body class="pt-navbar">
+  
+  <div class="breadcrumb container">
+    <a href="home.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">My Wishlist</span>
+  </div>
+
+  <section class="section pt-0">
+    <div class="container">
+      <h2 style="font-size:1.5rem; margin-bottom:24px;">My Wishlist <span style="color:var(--text-muted); font-size:1rem; font-weight:400;" id="wCount"></span></h2>
+      
+      <div id="wishlistGrid" class="wishlist-grid"></div>
+    </div>
+  </section>
+
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    function removeWishlist(id) {
+      const product = getProduct(id);
+      Store.wishlist.toggle(product);
+      renderWishlist();
+    }
+
+    function moveCart(id) {
+      addToCart(id);
+      removeWishlist(id);
+    }
+
+    function renderWishlist() {
+      const items = Store.wishlist.items();
+      const container = document.getElementById('wishlistGrid');
+      
+      document.getElementById('wCount').textContent = `(${items.length} items)`;
+      
+      if (items.length === 0) {
+        container.style.display = 'block';
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-regular fa-heart empty-state-icon"></i>
+            <h3>Your Wishlist is Empty</h3>
+            <p>Save items that you like in your wishlist. Review them anytime and easily move them to the bag.</p>
+            <a href="home.html" class="btn btn-primary btn-lg">Continue Shopping</a>
+          </div>
+        `;
+        return;
+      }
+      
+      container.style.display = 'grid';
+      container.innerHTML = items.map(p => {
+        const discount = Math.round(((p.original - p.price) / p.original) * 100);
+        return `
+          <div class="product-card" style="display:flex; flex-direction:column; height:100%;">
+            <button class="product-card-wishlist active" onclick="removeWishlist('${p.id}')">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="product-card-img-wrap" style="cursor:pointer;" onclick="window.location.href='product-details.html?id=${p.id}'">
+              <img src="${p.img}" alt="${p.name}">
+            </div>
+            <div class="product-card-body" style="flex:1;">
+              <div class="product-card-brand">${p.brand}</div>
+              <div class="product-card-name" title="${p.name}">${p.name}</div>
+              <div class="product-card-price">
+                <span class="price-current">₹${p.price}</span>
+                ${p.original > p.price ? `<span class="price-original">₹${p.original}</span><span class="price-discount">(${discount}% OFF)</span>` : ''}
+              </div>
+            </div>
+            <div style="padding:0 14px 14px;">
+              <button class="btn btn-outline btn-full" onclick="moveCart('${p.id}')">Move to Bag</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderWishlist();
+    });
+  </script>
+</body>
+</html>

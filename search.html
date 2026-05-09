@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+</head>
+<body class="pt-navbar">
+
+  <div class="container section-sm">
+    <!-- Search bar (inline, large) -->
+    <div style="max-width:600px;margin:0 auto 32px;position:relative;">
+      <input type="text" id="searchInput" class="form-control" placeholder="Search for products, brands and more..."
+        style="padding:14px 56px 14px 20px;font-size:1.0625rem;border-radius:var(--radius-full);border:2px solid var(--border);">
+      <button id="searchBtn" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--primary);font-size:1.25rem;cursor:pointer;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+
+    <!-- Query + Count -->
+    <div style="margin-bottom:24px;">
+      <h1 style="font-size:1.375rem;font-weight:700;" id="queryTitle">Showing results</h1>
+      <p style="color:var(--text-muted);margin-top:4px;" id="productCount"></p>
+    </div>
+
+    <!-- Sort + Filters row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+      <!-- Category chips -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;" id="categoryChips">
+        <span class="chip active" data-cat="">All</span>
+        <span class="chip" data-cat="men">Men</span>
+        <span class="chip" data-cat="women">Women</span>
+        <span class="chip" data-cat="kids">Kids</span>
+        <span class="chip" data-cat="beauty">Beauty</span>
+        <span class="chip" data-cat="living">Home & Living</span>
+      </div>
+      <select class="sort-select" id="sortSelect" style="padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);color:var(--text);">
+        <option value="relevance">Recommended</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid" id="productsGrid"></div>
+
+    <!-- No results -->
+    <div id="noResults" style="display:none;text-align:center;padding:60px 20px;">
+      <i class="fa-solid fa-magnifying-glass" style="font-size:3rem;color:var(--text-muted);margin-bottom:16px;"></i>
+      <h3 style="margin-bottom:8px;">No results found</h3>
+      <p style="color:var(--text-muted);">Try different keywords or browse our collections below.</p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+        <a href="men.html" class="btn btn-outline">Men</a>
+        <a href="women.html" class="btn btn-outline">Women</a>
+        <a href="beauty.html" class="btn btn-outline">Beauty</a>
+        <a href="living.html" class="btn btn-outline">Home & Living</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script src="js/ui-enhancements.js"></script>
+
+  <script>
+    /* ── State ─────────────────────────────────────── */
+    let currentQuery = '';
+    let currentCat   = '';
+    let currentSort  = 'relevance';
+
+    /* ── Init on load ──────────────────────────────── */
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      currentQuery  = params.get('q') || '';
+
+      const input = document.getElementById('searchInput');
+      input.value  = currentQuery;
+
+      renderResults();
+
+      /* Sort */
+      document.getElementById('sortSelect').addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderResults();
+      });
+
+      /* Search button */
+      document.getElementById('searchBtn').addEventListener('click', runSearch);
+      input.addEventListener('keypress', e => { if (e.key === 'Enter') runSearch(); });
+
+      /* Category chips */
+      document.querySelectorAll('#categoryChips .chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('#categoryChips .chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          currentCat = chip.dataset.cat;
+          renderResults();
+        });
+      });
+    });
+
+    function runSearch() {
+      currentQuery = document.getElementById('searchInput').value.trim();
+      history.pushState(null, '', `?q=${encodeURIComponent(currentQuery)}`);
+      renderResults();
+    }
+
+    /* ── Core render ────────────────────────────────── */
+    function renderResults() {
+      const query = currentQuery.toLowerCase();
+
+      /* Get ALL products from the flat PRODUCTS array — fixed bug */
+      let results = [...PRODUCTS];
+
+      /* Filter by search query */
+      if (query) {
+        results = results.filter(p =>
+          p.name.toLowerCase().includes(query) ||
+          p.brand.toLowerCase().includes(query) ||
+          (p.cat || '').toLowerCase().includes(query)
+        );
+      }
+
+      /* Filter by category chip */
+      if (currentCat) {
+        results = results.filter(p => p.cat === currentCat);
+      }
+
+      /* Sort */
+      switch (currentSort) {
+        case 'price-asc':  results.sort((a, b) => a.price - b.price); break;
+        case 'price-desc': results.sort((a, b) => b.price - a.price); break;
+        case 'rating':     results.sort((a, b) => b.rating - a.rating); break;
+      }
+
+      /* Update heading */
+      const titleEl = document.getElementById('queryTitle');
+      const countEl = document.getElementById('productCount');
+      titleEl.textContent = currentQuery
+        ? `Results for "${currentQuery}"`
+        : 'All Products';
+      countEl.textContent = `${results.length} product${results.length !== 1 ? 's' : ''} found`;
+
+      const grid     = document.getElementById('productsGrid');
+      const noResult = document.getElementById('noResults');
+
+      if (results.length === 0) {
+        grid.innerHTML = '';
+        noResult.style.display = 'block';
+        return;
+      }
+
+      noResult.style.display  = 'none';
+      renderProductsGrid('productsGrid', results);
+    }
+  </script>
+</body>
+</html>

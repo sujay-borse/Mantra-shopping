@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Women's Fashion | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body>
+  
+  <div class="cat-hero" style="background-image: url('https://source.unsplash.com/1600x400/?women,fashion,clothing');">
+    <div class="cat-hero-content container">
+      <h1>Women's Fashion</h1>
+      <p>Explore exclusive collections, top brands, and trendy styles for every occasion.</p>
+    </div>
+  </div>
+
+  <div class="breadcrumb container">
+    <a href="home.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Women</span>
+  </div>
+
+  <div class="cat-page">
+    <aside class="filter-sidebar" id="filterSidebar">
+      <div class="filter-title">
+        <span>FILTERS</span>
+        <span class="filter-clear" onclick="location.reload()">CLEAR ALL</span>
+      </div>
+      
+      <div class="filter-group">
+        <div class="filter-group-title">Brands</div>
+        <label class="filter-option"><input type="checkbox" value="Biba"> Biba</label>
+        <label class="filter-option"><input type="checkbox" value="Vero Moda"> Vero Moda</label>
+        <label class="filter-option"><input type="checkbox" value="Mango"> Mango</label>
+        <label class="filter-option"><input type="checkbox" value="Zara"> Zara</label>
+        <label class="filter-option"><input type="checkbox" value="W"> W</label>
+        <label class="filter-option"><input type="checkbox" value="Forever 21"> Forever 21</label>
+        <label class="filter-option"><input type="checkbox" value="H&M"> H&M</label>
+        <label class="filter-option"><input type="checkbox" value="Sassafras"> Sassafras</label>
+      </div>
+      
+      <div class="filter-group">
+        <div class="filter-group-title">Price Range</div>
+        <div class="price-range-wrap">
+          <input type="range" id="priceRange" min="0" max="10000" step="500" value="10000">
+          <div class="price-labels">
+            <span>₹0</span>
+            <span id="priceVal">₹10000</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="filter-group">
+        <div class="filter-group-title">Customer Rating</div>
+        <label class="filter-option"><input type="radio" name="rating" value="4"> 4★ & above</label>
+        <label class="filter-option"><input type="radio" name="rating" value="3"> 3★ & above</label>
+      </div>
+    </aside>
+
+    <main class="products-area">
+      <div class="sort-bar">
+        <button class="filter-toggle-btn" id="mobileFilterBtn">
+          <i class="fa-solid fa-filter"></i> Filters
+        </button>
+        <div class="sort-count" id="productCount">Loading...</div>
+        <select class="sort-select" id="sortSelect">
+          <option value="relevance">Sort by: Recommended</option>
+          <option value="newest">Sort by: What's New</option>
+          <option value="price-asc">Sort by: Price (Low to High)</option>
+          <option value="price-desc">Sort by: Price (High to Low)</option>
+          <option value="rating">Sort by: Customer Rating</option>
+        </select>
+      </div>
+      
+      <div class="products-grid" id="productsGrid"></div>
+    </main>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initMobileFilter();
+      
+      const manager = new ProductManager(getProductsByCategory('women'), 'productsGrid');
+      manager.render();
+      
+      document.getElementById('sortSelect').addEventListener('change', (e) => {
+        manager.sortBy = e.target.value;
+        manager.applyFilters();
+      });
+      
+      const priceRange = document.getElementById('priceRange');
+      const priceVal = document.getElementById('priceVal');
+      priceRange.addEventListener('input', (e) => {
+        priceVal.textContent = '₹' + e.target.value;
+        manager.filters.priceMax = parseInt(e.target.value);
+        manager.applyFilters();
+      });
+      
+      document.querySelectorAll('.filter-group input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', () => {
+          const brands = Array.from(document.querySelectorAll('.filter-group input[type="checkbox"]:checked')).map(el => el.value);
+          manager.filters.brands = brands;
+          manager.applyFilters();
+        });
+      });
+      
+      document.querySelectorAll('input[name="rating"]').forEach(rb => {
+        rb.addEventListener('change', (e) => {
+          manager.filters.rating = parseInt(e.target.value);
+          manager.applyFilters();
+        });
+      });
+      
+      document.querySelectorAll('.nav-search-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          manager.filters.search = e.target.value;
+          manager.applyFilters();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

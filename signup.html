@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-logo">Mantra<span style="color:var(--accent)">.</span></div>
+      <p class="auth-subtitle">Create your account to get started.</p>
+
+      <!-- Step 1: Role -->
+      <div id="roleStep">
+        <div style="display:flex;gap:12px;margin-bottom:24px;">
+          <div class="role-card" id="roleUser" onclick="selectRole('user')">
+            <i class="fa-solid fa-user"></i>
+            <h3>Customer</h3>
+            <p>Shop the latest trends</p>
+          </div>
+          <div class="role-card" id="roleSeller" onclick="selectRole('seller')">
+            <i class="fa-solid fa-store"></i>
+            <h3>Seller</h3>
+            <p>Sell on Mantra marketplace</p>
+          </div>
+        </div>
+        <div id="roleError" style="color:var(--error);font-size:0.8125rem;margin-bottom:12px;display:none;">Please select a role.</div>
+        <button class="btn btn-primary btn-full" onclick="proceedToForm()">Continue</button>
+        <div class="auth-switch" style="margin-top:16px;">Already have an account? <a href="login.html">Sign in</a></div>
+      </div>
+
+      <!-- Step 2: Form -->
+      <div id="signupStep" style="display:none;">
+        <div id="roleBadge" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--primary-light);border-radius:var(--radius-sm);margin-bottom:20px;font-size:0.875rem;font-weight:600;color:var(--primary);">
+          <i class="fa-solid fa-user"></i>
+          <span id="roleBadgeText">Customer</span>
+          <button onclick="backToRole()" style="margin-left:auto;font-size:0.75rem;color:var(--text-muted);background:none;border:none;cursor:pointer;">Change</button>
+        </div>
+
+        <form id="signupForm">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="name" required placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" required placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="input-wrap">
+              <input type="password" class="form-control" id="password" required placeholder="Min. 6 characters">
+              <i class="fa-regular fa-eye password-toggle" onclick="togglePwd()"></i>
+            </div>
+          </div>
+          <!-- Seller-only fields -->
+          <div id="sellerFields" style="display:none;">
+            <div class="form-group">
+              <label class="form-label">Store Name</label>
+              <input type="text" class="form-control" id="storeName" placeholder="Your store name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Business Category</label>
+              <select class="form-control" id="businessCat">
+                <option>Fashion & Clothing</option>
+                <option>Beauty & Grooming</option>
+                <option>Home & Living</option>
+                <option>Kids & Baby</option>
+                <option>Sports & Fitness</option>
+                <option>Electronics</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:0.875rem;color:var(--text-secondary);">
+              <input type="checkbox" id="termsCheck" style="accent-color:var(--primary);margin-top:2px;">
+              I agree to the <a href="terms.html" style="color:var(--primary);">Terms & Conditions</a> and <a href="privacy.html" style="color:var(--primary);">Privacy Policy</a>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full btn-lg">Create Account</button>
+        </form>
+
+        <div class="auth-divider">or sign up with</div>
+        <div class="social-btns">
+          <button class="social-btn" onclick="googleSignup()">
+            <i class="fa-brands fa-google" style="color:#DB4437"></i> Google
+          </button>
+        </div>
+
+        <div class="auth-switch">Already have an account? <a href="login.html">Sign in</a></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  <script>
+    let selectedRole = null;
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('role' + (role === 'user' ? 'User' : 'Seller')).classList.add('selected');
+      document.getElementById('roleError').style.display = 'none';
+    }
+
+    function proceedToForm() {
+      if (!selectedRole) { document.getElementById('roleError').style.display = 'block'; return; }
+      document.getElementById('roleStep').style.display = 'none';
+      document.getElementById('signupStep').style.display = 'block';
+      const isSeller = selectedRole === 'seller';
+      document.getElementById('roleBadgeText').textContent = isSeller ? 'Seller' : 'Customer';
+      document.getElementById('roleBadge').querySelector('i').className = `fa-solid ${isSeller ? 'fa-store' : 'fa-user'}`;
+      document.getElementById('sellerFields').style.display = isSeller ? 'block' : 'none';
+    }
+
+    function backToRole() {
+      document.getElementById('signupStep').style.display = 'none';
+      document.getElementById('roleStep').style.display = 'block';
+    }
+
+    function togglePwd() {
+      const i = document.getElementById('password');
+      const icon = document.querySelector('.password-toggle');
+      i.type = i.type === 'password' ? 'text' : 'password';
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    }
+
+    // Removed inline googleSignup function. Handled by module script below.
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (Store.auth.isLoggedIn()) {
+        window.location.href = 'home.html';
+        return;
+      }
+
+      document.getElementById('signupForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name  = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const pwd   = document.getElementById('password').value;
+        const terms = document.getElementById('termsCheck').checked;
+
+        if (!terms) { showToast('Please accept Terms & Conditions', 'error'); return; }
+        if (pwd.length < 6) { showToast('Password must be at least 6 characters', 'error'); return; }
+
+        Store.auth.login(name, email, selectedRole || 'user');
+        showToast(`Welcome to Mantra, ${name}! 🎉`);
+        setTimeout(() => {
+          window.location.href = selectedRole === 'seller' ? 'seller-dashboard.html' : 'home.html';
+        }, 1200);
+      });
+    });
+  </script>
+  <script type="module">
+    import { signInWithGoogle } from './js/firebase-auth.js';
+    window.googleSignup = async function() {
+      if (!selectedRole) { 
+        document.getElementById('roleError').style.display = 'block'; 
+        return; 
+      }
+      try {
+        showToast('Connecting to Google...', 'info');
+        const { idToken } = await signInWithGoogle();
+        
+        // Send token to backend
+        const response = await fetch('http://localhost:5000/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken, role: selectedRole })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          Store.auth.login(data.user.name, data.user.email, data.user.role, data.token);
+          showToast(`Welcome to Mantra, ${data.user.name}! 🎉`);
+          setTimeout(() => {
+            window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'home.html';
+          }, 1200);
+        } else {
+          showToast(data.error || 'Google signup failed', 'error');
+        }
+      } catch (error) {
+        console.error(error);
+        showToast('Google signup failed or was cancelled.', 'error');
+      }
+    };
+  </script>
+</body>
+</html>

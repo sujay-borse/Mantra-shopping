@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Dashboard | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="seller-layout">
+
+  <!-- Sidebar -->
+  <aside class="seller-sidebar">
+    <div class="seller-sidebar-logo">Mantra<span style="color:var(--accent,#F5A623)">.</span> Seller</div>
+    <a class="seller-nav-item active" data-tab="overview" onclick="switchTab('overview')"><i class="fa-solid fa-chart-pie"></i> Overview</a>
+    <a class="seller-nav-item" data-tab="products" onclick="switchTab('products')"><i class="fa-solid fa-boxes-stacked"></i> Products</a>
+    <a class="seller-nav-item" data-tab="orders" onclick="switchTab('orders')"><i class="fa-solid fa-bag-shopping"></i> Orders</a>
+    <a class="seller-nav-item" data-tab="analytics" onclick="switchTab('analytics')"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+    <a class="seller-nav-item" data-tab="wallet" onclick="switchTab('wallet')"><i class="fa-solid fa-wallet"></i> Wallet</a>
+    <a class="seller-nav-item" data-tab="aitools" onclick="switchTab('aitools')"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Tools</a>
+    <div style="margin-top:auto;padding:20px;">
+      <a href="home.html" class="seller-nav-item" style="margin-top:20px;"><i class="fa-solid fa-arrow-left"></i> Back to Store</a>
+      <button onclick="logoutSeller()" class="seller-nav-item" style="width:100%;margin-top:8px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="seller-main">
+
+    <!-- Header -->
+    <div class="seller-header">
+      <div>
+        <h1 style="font-size:1.5rem;font-weight:800;" id="sellerName">Welcome back, Seller!</h1>
+        <p style="color:var(--text-muted);font-size:0.9375rem;">Here's your store performance at a glance.</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <button class="theme-toggle" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="btn btn-primary" onclick="switchTab('products')"><i class="fa-solid fa-plus"></i> Add Product</button>
+      </div>
+    </div>
+
+    <!-- TAB: OVERVIEW -->
+    <div id="tab-overview">
+      <div class="stat-grid">
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#FFE8EE;"><i class="fa-solid fa-indian-rupee-sign" style="color:#FF3E6C;"></i></div>
+          <div class="stat-tile-value" id="totalRevenue">₹0</div>
+          <div class="stat-tile-label">Total Revenue</div>
+          <div class="stat-tile-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +18% this month</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#E8F8EE;"><i class="fa-solid fa-bag-shopping" style="color:#00B057;"></i></div>
+          <div class="stat-tile-value" id="totalOrders">0</div>
+          <div class="stat-tile-label">Total Orders</div>
+          <div class="stat-tile-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +7 this week</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#EEF0FF;"><i class="fa-solid fa-eye" style="color:#7c4dff;"></i></div>
+          <div class="stat-tile-value" id="totalViews">0</div>
+          <div class="stat-tile-label">Product Views</div>
+          <div class="stat-tile-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +23% this week</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#FFF3E0;"><i class="fa-solid fa-percent" style="color:#F5A623;"></i></div>
+          <div class="stat-tile-value" id="conversionRate">0%</div>
+          <div class="stat-tile-label">Conversion Rate</div>
+          <div class="stat-tile-trend down"><i class="fa-solid fa-arrow-trend-down"></i> -1.2% vs last month</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div class="chart-card">
+          <h3>Monthly Revenue (₹)</h3>
+          <canvas id="revenueChart" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Sales by Category</h3>
+          <canvas id="categoryChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PRODUCTS -->
+    <div id="tab-products" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px;">
+        <h2 style="font-size:1.25rem;font-weight:700;">My Products</h2>
+        <button class="btn btn-primary" onclick="document.getElementById('addProductForm').style.display='block'">
+          <i class="fa-solid fa-plus"></i> Add New Product
+        </button>
+      </div>
+
+      <!-- Add Product Form -->
+      <div id="addProductForm" style="display:none;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px;margin-bottom:24px;">
+        <h3 style="margin-bottom:20px;">Add New Product</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="form-group">
+            <label class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="newProductName" placeholder="e.g. Men Slim Fit Jeans">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Brand</label>
+            <input type="text" class="form-control" id="newProductBrand" placeholder="e.g. Levi's">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price (₹)</label>
+            <input type="number" class="form-control" id="newProductPrice" placeholder="1499">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Original Price (₹)</label>
+            <input type="number" class="form-control" id="newProductOriginal" placeholder="2999">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-control" id="newProductCat">
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+              <option value="kids">Kids</option>
+              <option value="beauty">Beauty</option>
+              <option value="living">Home & Living</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stock Quantity</label>
+            <input type="number" class="form-control" id="newProductStock" placeholder="50">
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" id="newProductDesc" rows="3" placeholder="Product description..."></textarea>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:16px;">
+          <button class="btn btn-primary" onclick="addProduct()">Save Product</button>
+          <button class="btn btn-outline" onclick="generateAIDesc()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Generate Description</button>
+          <button class="btn btn-outline-dark" onclick="document.getElementById('addProductForm').style.display='none'">Cancel</button>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <table class="data-table" id="productsTable">
+          <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="productsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: ORDERS -->
+    <div id="tab-orders" style="display:none;">
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:24px;">Recent Orders</h2>
+      <div class="chart-card">
+        <table class="data-table">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: ANALYTICS -->
+    <div id="tab-analytics" style="display:none;">
+      <div class="grid grid-cols-2 gap-6">
+        <div class="chart-card">
+          <h3>Weekly Sales Volume</h3>
+          <canvas id="weeklyChart" height="260"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Traffic Sources</h3>
+          <canvas id="trafficChart" height="260"></canvas>
+        </div>
+        <div class="chart-card col-span-2">
+          <h3>Product Performance</h3>
+          <canvas id="productChart" height="160"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: WALLET -->
+    <div id="tab-wallet" style="display:none;">
+      <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#E8F8EE;"><i class="fa-solid fa-wallet" style="color:#00B057;"></i></div>
+          <div class="stat-tile-value" id="walletBalance">₹0</div>
+          <div class="stat-tile-label">Available Balance</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#FFE8EE;"><i class="fa-solid fa-arrow-down" style="color:#FF3E6C;"></i></div>
+          <div class="stat-tile-value" id="totalEarnings">₹0</div>
+          <div class="stat-tile-label">Total Earnings</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#EEF0FF;"><i class="fa-solid fa-arrow-up" style="color:#7c4dff;"></i></div>
+          <div class="stat-tile-value">₹0</div>
+          <div class="stat-tile-label">Total Withdrawn</div>
+        </div>
+      </div>
+      <div class="chart-card" style="margin-top:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3 style="margin-bottom:0;">Withdraw Earnings</h3>
+        </div>
+        <div style="max-width:400px;">
+          <div class="form-group">
+            <label class="form-label">Amount (₹)</label>
+            <input type="number" class="form-control" id="withdrawAmount" placeholder="Minimum ₹500">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bank Account / UPI ID</label>
+            <input type="text" class="form-control" id="withdrawAccount" placeholder="UPI ID or Account Number">
+          </div>
+          <button class="btn btn-primary" onclick="requestWithdraw()">Request Withdrawal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: AI TOOLS -->
+    <div id="tab-aitools" style="display:none;">
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:24px;">AI Seller Tools</h2>
+      <div class="grid grid-cols-2 gap-6">
+        <div class="chart-card">
+          <h3>📝 AI Product Description</h3>
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.875rem;">Generate compelling product descriptions using AI.</p>
+          <div class="form-group">
+            <input type="text" class="form-control" id="aiDescProduct" placeholder="Product name (e.g. Men's Slim Fit Jeans)">
+          </div>
+          <button class="btn btn-primary btn-full" onclick="aiGenerateDesc()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Description</button>
+          <div id="aiDescResult" style="margin-top:16px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);font-size:0.9375rem;display:none;"></div>
+        </div>
+        <div class="chart-card">
+          <h3>💰 AI Price Suggestion</h3>
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.875rem;">Get smart pricing recommendations for your products.</p>
+          <div class="form-group">
+            <input type="text" class="form-control" id="aiPriceProduct" placeholder="Product name">
+          </div>
+          <div class="form-group">
+            <input type="number" class="form-control" id="aiPriceCost" placeholder="Your cost price (₹)">
+          </div>
+          <button class="btn btn-primary btn-full" onclick="aiSuggestPrice()"><i class="fa-solid fa-wand-magic-sparkles"></i> Suggest Price</button>
+          <div id="aiPriceResult" style="margin-top:16px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);font-size:0.9375rem;display:none;"></div>
+        </div>
+        <div class="chart-card">
+          <h3>🔍 SEO Title Generator</h3>
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.875rem;">Generate SEO-optimized titles to boost discoverability.</p>
+          <div class="form-group">
+            <input type="text" class="form-control" id="aiSeoProduct" placeholder="Product keywords">
+          </div>
+          <button class="btn btn-primary btn-full" onclick="aiGenerateSEO()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate SEO Titles</button>
+          <div id="aiSeoResult" style="margin-top:16px;padding:16px;background:var(--bg);border-radius:var(--radius-sm);font-size:0.9375rem;display:none;"></div>
+        </div>
+        <div class="chart-card">
+          <h3>📊 Inventory Alert</h3>
+          <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.875rem;">AI-powered low-stock and reorder suggestions.</p>
+          <div id="inventoryAlerts"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="js/store.js"></script>
+<script src="js/seller.js"></script>
+</body>
+</html>

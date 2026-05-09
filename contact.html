@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body>
+  
+  <div class="page-header">
+    <h1>Contact Us</h1>
+    <p>We'd love to hear from you. Get in touch with our team.</p>
+  </div>
+
+  <div class="contact-layout">
+    <div>
+      <h2 style="font-size:1.5rem; margin-bottom:24px;">Get In Touch</h2>
+      
+      <div class="contact-info-card">
+        <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+        <div>
+          <h4 style="font-size:1rem; margin-bottom:4px;">Head Office</h4>
+          <p style="color:var(--text-secondary); font-size:0.9375rem;">123 Fashion Street, Tech Park,<br>Mumbai, Maharashtra 400001</p>
+        </div>
+      </div>
+      
+      <div class="contact-info-card">
+        <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+        <div>
+          <h4 style="font-size:1rem; margin-bottom:4px;">Phone Number</h4>
+          <p style="color:var(--text-secondary); font-size:0.9375rem;">+91 1800 123 4567<br>Mon-Sat, 9AM to 7PM</p>
+        </div>
+      </div>
+      
+      <div class="contact-info-card">
+        <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+        <div>
+          <h4 style="font-size:1rem; margin-bottom:4px;">Email Support</h4>
+          <p style="color:var(--text-secondary); font-size:0.9375rem;">support@mantra.com<br>Response within 24 hours</p>
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div style="background:var(--white); border-radius:var(--radius-md); padding:32px; box-shadow:var(--shadow-md);">
+        <h3 style="font-size:1.25rem; margin-bottom:24px;">Send us a message</h3>
+        <form onsubmit="event.preventDefault(); showToast('Message sent successfully!'); this.reset();">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" required placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" required placeholder="Your email address">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <input type="text" class="form-control" required placeholder="What is this regarding?">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" rows="4" required placeholder="Type your message here..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full btn-lg">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

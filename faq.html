@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body class="bg-bg pt-navbar">
+  
+  <div class="page-header" style="margin-top:0;">
+    <h1>Frequently Asked Questions</h1>
+    <p>Find answers to common questions about our products and services.</p>
+  </div>
+
+  <div class="faq-page">
+    <div class="faq-item">
+      <div class="faq-q">
+        <span>How do I track my order?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-a">
+        <p>You can track your order by logging into your account and visiting the "Orders" section in your Profile. You will also receive email and SMS updates with tracking links once your order is dispatched.</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-q">
+        <span>What is your return policy?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-a">
+        <p>We offer a hassle-free 14-day return and exchange policy for most products. The items must be unused, unwashed, and have all original tags attached. Certain categories like innerwear and cosmetics are non-returnable due to hygiene reasons.</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-q">
+        <span>Do you offer cash on delivery (COD)?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-a">
+        <p>Yes, Cash on Delivery is available for most pin codes in India. You can select the COD option during checkout. Please note that an additional convenience fee might apply for COD orders in some cases.</p>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-q">
+        <span>How long does delivery take?</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+      <div class="faq-a">
+        <p>Standard delivery usually takes 3-5 business days depending on your location. We also offer Express Delivery in select cities, which guarantees delivery within 24-48 hours for an additional fee.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.faq-q').forEach(q => {
+        q.addEventListener('click', () => {
+          const item = q.closest('.faq-item');
+          const wasOpen = item.classList.contains('open');
+          
+          document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+          
+          if (!wasOpen) {
+            item.classList.add('open');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

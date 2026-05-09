@@ -1,0 +1,250 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    font-family: sans-serif;
+    list-style: none;
+}
+
+.header{
+    width: 100%;
+    display: flex;
+    box-shadow: 0px 2px 10px 0px #ccc;
+    justify-content: space-between;
+    background-color: #ccc;
+    position: fixed;
+}
+
+.headerleft{
+    width: 48%;
+    margin-left: 2%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerright{
+    width: 45%;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.menu>ul{
+    display: flex;
+    gap: 70px;
+}
+
+.menu>ul>li a{
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+    gap: 10px;
+}
+
+.headerright form{
+        width: 65%;
+        display: flex;
+        gap: 5px;
+        margin-right: 2%;
+        height: 30px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+.headerright form button{
+    width: 10%;
+    background: transparent;
+    border: none;
+}
+
+.headerright form input{
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+}
+
+.profile ul{
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.profile ul li{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.banner{
+    width: 100%;
+    height: 500px;
+    padding-top: 70px;
+}
+
+.banner img{
+    width: 100%;
+    height: 100%;
+}
+
+.brand{
+    width: 100%;
+    padding: 60px 0px;
+}
+
+
+.brand h1{
+    font-size: 35px;
+    font-weight: bold;
+    padding-left: 50px;
+}
+
+
+.brandrow{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.items{
+    width: 17%;
+    box-shadow: 0px 0px 10px 2px #767474;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    margin-bottom: 50px;
+}
+
+
+.items img{
+    width: 100%;
+}
+
+.items b{
+    justify-content: center;
+    display: flex;
+    font-size: 20px;
+}
+
+/* for men, women, living, beauty page*/
+
+.men{
+    height: 370px;
+    display: flex;
+    width: 100%;
+    padding-top: 60px;
+    padding-bottom: 2px;
+}
+
+.img1{
+    background-color: #ccc;
+    width: 320px;
+    height: 100%;
+    margin: 8px;
+    padding: 5px;
+
+}
+
+.men img{
+    height: 80%;
+    width: 300px;
+    margin: 10px;
+}
+
+.men b{
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    justify-content: center;
+    display: flex;
+}
+
+.row2{
+    height: 370px;
+    display: flex;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    
+}
+
+.row2 img{
+    height: 80%;
+    width: 300px;
+    margin: 10px;
+}
+
+.row2 b{
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    justify-content: center;
+    display: flex;
+}
+
+.headline{
+    height: 80px;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 90px;
+    background-color: antiquewhite;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.headline b{
+    font-size: clamp(30px, 5vw, 70px);
+    font-family: 'Courier New', Courier, monospace;
+    justify-content: center;
+    display: flex;
+}
+
+.row3{
+    height: 370px;
+    display: flex;
+    width: 100%;
+    margin: 20px 0px;
+    padding-bottom: 50px;
+}
+
+.row3 img{
+    height: 80%;
+    width: 300px;
+    margin: 10px;
+}
+
+.row3 b{
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    justify-content: center;
+    display: flex;
+}
+
+.footer {
+    background-color: #f1f1f1;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #333;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.headline_women{
+    height: 120px;
+    width: 90%;
+    max-width: 1700px;
+    border-radius: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow:0px 0px 10px 10px #acabab;
+}
+
+.headline_women b{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: clamp(40px, 8vw, 100px);
+    margin-left: 30px;
+    color: #782424;
+
+}

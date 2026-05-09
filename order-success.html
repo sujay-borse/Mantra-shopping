@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Success | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body class="pt-navbar bg-bg">
+  
+  <div class="success-page">
+    <div class="success-animation">
+      <i class="fa-solid fa-check"></i>
+    </div>
+    
+    <h1>Order Placed Successfully!</h1>
+    <div class="order-id" id="orderIdDisplay">Order #ORD123456789</div>
+    
+    <p style="color:var(--text-secondary); margin-bottom:32px;">Thank you for shopping with Mantra. We'll send a confirmation email with order tracking details shortly.</p>
+    
+    <div style="display:flex; gap:16px; justify-content:center;">
+      <a href="profile.html" class="btn btn-outline-dark">View Order Status</a>
+      <a href="home.html" class="btn btn-primary">Continue Shopping</a>
+    </div>
+    
+    <div class="order-timeline">
+      <h3 style="margin-bottom:24px; font-size:1.125rem;">Delivery Tracking</h3>
+      
+      <div class="timeline-item">
+        <div class="timeline-dot"><i class="fa-solid fa-clipboard-check"></i></div>
+        <div class="timeline-info">
+          <h4>Order Confirmed</h4>
+          <span id="dateConfirmed">Today</span>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-dot pending"><i class="fa-solid fa-box"></i></div>
+        <div class="timeline-info">
+          <h4>Packed & Ready</h4>
+          <span style="opacity:0.6;">Expected Tomorrow</span>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-dot pending"><i class="fa-solid fa-truck-fast"></i></div>
+        <div class="timeline-info">
+          <h4>Out for Delivery</h4>
+          <span style="opacity:0.6;">Pending</span>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/components.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const orders = Store.orders.list();
+      if (orders.length > 0) {
+        document.getElementById('orderIdDisplay').textContent = `Order #${orders[0].id}`;
+        document.getElementById('dateConfirmed').textContent = new Date(orders[0].date).toLocaleString('en-US', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+      }
+      
+      // Fire confetti effect (basic CSS simulation via simple inject)
+      for(let i=0; i<30; i++) {
+        const conf = document.createElement('div');
+        conf.style.position = 'fixed';
+        conf.style.width = '10px';
+        conf.style.height = '10px';
+        conf.style.backgroundColor = ['#FF3E6C', '#F5A623', '#00B057', '#1A1A2E'][Math.floor(Math.random()*4)];
+        conf.style.left = Math.random() * 100 + 'vw';
+        conf.style.top = '-10px';
+        conf.style.zIndex = '9999';
+        conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        conf.style.transition = 'top 3s ease-in, transform 3s ease';
+        document.body.appendChild(conf);
+        
+        setTimeout(() => {
+          conf.style.top = '100vh';
+          conf.style.transform = `rotate(${Math.random()*360}deg) translateX(${Math.random()*100 - 50}px)`;
+        }, 10);
+        
+        setTimeout(() => conf.remove(), 3000);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body class="pt-navbar bg-bg">
+  
+  <div class="breadcrumb container">
+    <a href="home.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Payment</span>
+  </div>
+
+  <div class="payment-page">
+    <div style="text-align:center; margin-bottom:32px;">
+      <h2 style="font-size:1.5rem; margin-bottom:8px;">Choose Payment Method</h2>
+      <p style="color:var(--text-muted);">Amount to pay: <strong style="color:var(--text); font-size:1.25rem;" id="payAmount">₹0</strong></p>
+    </div>
+
+    <div class="checkout-layout" style="grid-template-columns:1fr; max-width:600px; margin:0 auto; padding:0;">
+      <form id="paymentForm">
+        <div class="payment-methods">
+          
+          <!-- Card -->
+          <div class="pay-method active">
+            <label class="pay-method-header">
+              <input type="radio" name="payType" value="card" checked onclick="switchPayMethod(this)">
+              <span>Credit / Debit Card</span>
+              <div style="margin-left:auto; display:flex; gap:4px;">
+                <i class="fa-brands fa-cc-visa text-xl" style="color:#1434CB"></i>
+                <i class="fa-brands fa-cc-mastercard text-xl" style="color:#EB001B"></i>
+              </div>
+            </label>
+            <div class="pay-method-body">
+              <div class="card-field">
+                <label>Card Number</label>
+                <input type="text" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" id="ccNum">
+              </div>
+              <div class="form-row">
+                <div class="card-field">
+                  <label>Valid Thru (MM/YY)</label>
+                  <input type="text" placeholder="MM/YY" maxlength="5">
+                </div>
+                <div class="card-field">
+                  <label>CVV</label>
+                  <input type="password" placeholder="XXX" maxlength="3">
+                </div>
+              </div>
+              <div class="card-field mb-0">
+                <label>Name on Card</label>
+                <input type="text" placeholder="Full Name">
+              </div>
+            </div>
+          </div>
+
+          <!-- UPI -->
+          <div class="pay-method">
+            <label class="pay-method-header">
+              <input type="radio" name="payType" value="upi" onclick="switchPayMethod(this)">
+              <span>UPI / QR</span>
+            </label>
+            <div class="pay-method-body">
+              <div class="upi-options">
+                <div class="upi-app active">GPay</div>
+                <div class="upi-app">PhonePe</div>
+                <div class="upi-app">Paytm</div>
+              </div>
+              <div class="card-field mb-0">
+                <label>UPI ID</label>
+                <input type="text" placeholder="username@upi">
+              </div>
+            </div>
+          </div>
+
+          <!-- COD -->
+          <div class="pay-method">
+            <label class="pay-method-header">
+              <input type="radio" name="payType" value="cod" onclick="switchPayMethod(this)">
+              <span>Cash on Delivery (COD)</span>
+            </label>
+            <div class="pay-method-body">
+              <p style="font-size:0.875rem; color:var(--text-secondary); line-height:1.6;">You can pay via Cash or UPI to the delivery executive when you receive the order.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-full" id="btnPay">
+          Pay Now
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    function switchPayMethod(radio) {
+      document.querySelectorAll('.pay-method').forEach(el => el.classList.remove('active'));
+      radio.closest('.pay-method').classList.add('active');
+      
+      const btn = document.getElementById('btnPay');
+      if(radio.value === 'cod') {
+        btn.innerHTML = '<i class="fa-solid fa-truck"></i> Place Order';
+      } else {
+        btn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹${localStorage.getItem('checkoutTotal') || 0}`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Store.auth.isLoggedIn() || Store.cart.items().length === 0) {
+        window.location.href = 'home.html';
+        return;
+      }
+
+      const total = localStorage.getItem('checkoutTotal') || Store.cart.total();
+      document.getElementById('payAmount').textContent = `₹${total}`;
+      document.getElementById('btnPay').innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹${total}`;
+
+      // Format card number
+      const ccNum = document.getElementById('ccNum');
+      if (ccNum) {
+        ccNum.addEventListener('input', function (e) {
+          e.target.value = e.target.value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+        });
+      }
+
+      // Handle submission
+      document.getElementById('paymentForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnPay');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+        btn.disabled = true;
+        
+        // Simulate payment delay
+        setTimeout(() => {
+          // Save order
+          const items = Store.cart.items();
+          const address = JSON.parse(localStorage.getItem('checkoutAddress') || '{}');
+          
+          Store.orders.add({
+            total: total,
+            items: items,
+            address: address,
+            status: 'Processing',
+            paymentMethod: document.querySelector('input[name="payType"]:checked').value
+          });
+          
+          // Clear cart & temp data
+          Store.cart.clear();
+          localStorage.removeItem('checkoutTotal');
+          localStorage.removeItem('tempDiscount');
+          
+          window.location.href = 'order-success.html';
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>

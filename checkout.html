@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body class="pt-navbar bg-bg">
+  
+  <div class="breadcrumb container">
+    <a href="home.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <a href="cart.html">Bag</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Checkout</span>
+  </div>
+
+  <div class="checkout-layout">
+    <div>
+      <form id="checkoutForm">
+        <!-- Address -->
+        <div class="checkout-section">
+          <div class="checkout-section-title">
+            <div class="step-num">1</div> Shipping Address
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name *</label>
+              <input type="text" class="form-control" id="fname" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name *</label>
+              <input type="text" class="form-control" id="lname" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" class="form-control" id="phone" pattern="[0-9]{10}" required placeholder="10-digit mobile number">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Address Line 1 *</label>
+            <input type="text" class="form-control" id="addr1" required placeholder="House No, Building, Street Area">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Address Line 2</label>
+            <input type="text" class="form-control" id="addr2" placeholder="Locality/Town (Optional)">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Pincode *</label>
+              <input type="text" class="form-control" id="pin" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <input type="text" class="form-control" id="city" required>
+            </div>
+          </div>
+          
+          <div class="form-group mb-0">
+            <label class="form-label">State *</label>
+            <select class="form-control form-select" id="state" required>
+              <option value="">Select State</option>
+              <option value="MH">Maharashtra</option>
+              <option value="DL">Delhi</option>
+              <option value="KA">Karnataka</option>
+              <option value="TN">Tamil Nadu</option>
+              <option value="UP">Uttar Pradesh</option>
+              <option value="GU">Gujarat</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Delivery Method -->
+        <div class="checkout-section">
+          <div class="checkout-section-title">
+            <div class="step-num">2</div> Delivery Options
+          </div>
+          
+          <label class="delivery-option active" id="delOpt1">
+            <input type="radio" name="delivery" value="standard" checked onclick="selectDelivery(this)">
+            <div style="flex:1;">
+              <div style="font-weight:600; margin-bottom:4px;">Standard Delivery</div>
+              <div style="font-size:0.8125rem; color:var(--text-muted);">Get it by <span id="stdDate"></span></div>
+            </div>
+            <div style="font-weight:700; color:var(--success);">FREE</div>
+          </label>
+          
+          <label class="delivery-option" id="delOpt2">
+            <input type="radio" name="delivery" value="express" onclick="selectDelivery(this)">
+            <div style="flex:1;">
+              <div style="font-weight:600; margin-bottom:4px;">Express Delivery</div>
+              <div style="font-size:0.8125rem; color:var(--text-muted);">Get it by Tomorrow</div>
+            </div>
+            <div style="font-weight:700;">₹99</div>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-full" style="margin-bottom:40px;">
+          Continue to Payment
+        </button>
+      </form>
+    </div>
+    
+    <div>
+      <div class="cart-summary" style="top:calc(var(--navbar-h) + 16px);">
+        <h3>Order Summary</h3>
+        <div id="orderItems" style="margin-bottom:20px; max-height:300px; overflow-y:auto; padding-right:10px;"></div>
+        
+        <div class="summary-row" style="border-top:1px solid var(--border); padding-top:16px;">
+          <span>Subtotal</span>
+          <span id="summTotal">₹0</span>
+        </div>
+        <div class="summary-row savings" id="summDiscountRow" style="display:none;">
+          <span>Coupon Discount</span>
+          <span id="summDiscount">-₹0</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery</span>
+          <span id="summDelivery" style="color:var(--success);">FREE</span>
+        </div>
+        
+        <div class="summary-row total">
+          <span>Total to Pay</span>
+          <span id="summFinal">₹0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    let finalAmount = 0;
+    let deliveryFee = 0;
+    const discount = parseInt(localStorage.getItem('tempDiscount') || '0');
+
+    function selectDelivery(radio) {
+      document.querySelectorAll('.delivery-option').forEach(el => el.classList.remove('active'));
+      radio.closest('.delivery-option').classList.add('active');
+      
+      if (radio.value === 'express') {
+        deliveryFee = 99;
+        document.getElementById('summDelivery').textContent = '₹99';
+        document.getElementById('summDelivery').style.color = 'var(--text)';
+      } else {
+        deliveryFee = 0;
+        document.getElementById('summDelivery').textContent = 'FREE';
+        document.getElementById('summDelivery').style.color = 'var(--success)';
+      }
+      
+      updateTotals();
+    }
+
+    function updateTotals() {
+      const items = Store.cart.items();
+      const actualTotal = items.reduce((s, x) => s + (x.price * x.qty), 0);
+      
+      document.getElementById('summTotal').textContent = `₹${actualTotal}`;
+      
+      if (discount > 0) {
+        document.getElementById('summDiscountRow').style.display = 'flex';
+        document.getElementById('summDiscount').textContent = `-₹${discount}`;
+      }
+      
+      finalAmount = actualTotal - discount + deliveryFee;
+      document.getElementById('summFinal').textContent = `₹${finalAmount}`;
+      
+      // Save for payment page
+      localStorage.setItem('checkoutTotal', finalAmount);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!Store.auth.isLoggedIn()) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const items = Store.cart.items();
+      if (items.length === 0) {
+        window.location.href = 'cart.html';
+        return;
+      }
+      
+      // Populate items
+      let itemsHTML = '';
+      items.forEach(item => {
+        itemsHTML += `
+          <div style="display:flex; gap:12px; margin-bottom:12px; font-size:0.875rem;">
+            <div style="width:60px; height:80px; border-radius:4px; overflow:hidden; background:var(--bg); flex-shrink:0;">
+              <img src="${item.img}" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:600; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.name}</div>
+              <div style="color:var(--text-muted); margin-bottom:4px;">Qty: ${item.qty} | Size: ${item.size}</div>
+              <div style="font-weight:700;">₹${item.price * item.qty}</div>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('orderItems').innerHTML = itemsHTML;
+      
+      // Dates
+      const d = new Date();
+      d.setDate(d.getDate() + 4);
+      document.getElementById('stdDate').textContent = d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+      
+      updateTotals();
+      
+      // Form submit
+      document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Save address to localstorage
+        const address = {
+          name: `${document.getElementById('fname').value} ${document.getElementById('lname').value}`,
+          phone: document.getElementById('phone').value,
+          line1: document.getElementById('addr1').value,
+          line2: document.getElementById('addr2').value,
+          city: document.getElementById('city').value,
+          state: document.getElementById('state').value,
+          pin: document.getElementById('pin').value
+        };
+        localStorage.setItem('checkoutAddress', JSON.stringify(address));
+        
+        window.location.href = 'payment.html';
+      });
+    });
+  </script>
+</body>
+</html>

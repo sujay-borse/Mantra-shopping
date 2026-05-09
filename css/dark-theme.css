@@ -1,0 +1,487 @@
+/* ================================================================
+   MANTRA — DARK NEON THEME
+   All dark mode overrides. Applied when [data-theme="dark"] is set on <html>.
+   ================================================================ */
+
+[data-theme="dark"] {
+  /* ─── Core Palette ─── */
+  --primary: #f50057; /* brighter pink/magenta */
+  --primary-dark: #c51162;
+  --primary-light: rgba(245, 0, 87, 0.15);
+  --secondary: #05050a; /* deeper black */
+  --secondary-light: #12121a;
+  --accent: #00e5ff; /* neon blue */
+  --accent-2: #d500f9; /* neon purple */
+  --success: #00e676;
+  --error: #ff1744;
+  --warning: #ffab00;
+
+  /* ─── Surfaces ─── */
+  --white: #0a0a14; /* deep surface */
+  --surface: #10101a;
+  --bg: #05050a;
+  --surface-2: #151522;
+  --surface-3: #1a1a2b;
+
+  /* ─── Text ─── */
+  --text: #ffffff; /* brighter text for contrast */
+  --text-secondary: #c0c0d0;
+  --text-muted: #808098;
+
+  /* ─── Borders ─── */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-dark: rgba(255, 255, 255, 0.15);
+  --border-glow: rgba(245, 0, 87, 0.4);
+
+  /* ─── Shadows / Glows ─── */
+  --shadow-xs: 0 1px 4px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.7);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.8);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.9);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.95);
+  --glow-primary: 0 0 20px rgba(245, 0, 87, 0.6);
+  --glow-accent: 0 0 20px rgba(0, 229, 255, 0.5);
+  --glow-success: 0 0 20px rgba(0, 230, 118, 0.4);
+
+  /* ─── Glass ─── */
+  --glass-bg: rgba(16, 16, 26, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(24px);
+}
+
+/* ─── Dark Mode Global Overrides ─── */
+[data-theme="dark"] body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+[data-theme="dark"] .navbar,
+[data-theme="dark"] .header {
+  background: rgba(13, 13, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .navbar.scrolled {
+  background: rgba(13, 13, 26, 0.95);
+  box-shadow: 0 4px 30px rgba(224, 64, 251, 0.1);
+}
+
+[data-theme="dark"] .nav-link {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .nav-link:hover,
+[data-theme="dark"] .nav-link.active {
+  color: var(--primary);
+  text-shadow: 0 0 12px var(--primary);
+}
+
+[data-theme="dark"] .nav-search-input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-dark);
+  color: var(--text);
+}
+
+[data-theme="dark"] .nav-search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light), var(--glow-primary);
+}
+
+[data-theme="dark"] .nav-action-btn {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .nav-action-btn:hover {
+  color: var(--primary);
+}
+
+[data-theme="dark"] .mobile-menu {
+  background: var(--secondary-light);
+  border-right: 1px solid var(--border);
+}
+
+[data-theme="dark"] .mobile-menu-link {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .mobile-menu-link:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* ─── Legacy Page Elements ─── */
+[data-theme="dark"] .img1,
+[data-theme="dark"] .headline,
+[data-theme="dark"] .headline_women {
+  background-color: var(--surface);
+  color: var(--text);
+  box-shadow: 0px 0px 10px 2px var(--glow-primary);
+}
+[data-theme="dark"] .headline b,
+[data-theme="dark"] .headline_women b {
+  color: var(--primary);
+}
+
+/* ─── Cards ─── */
+[data-theme="dark"] .product-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .product-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--glow-primary);
+}
+
+[data-theme="dark"] .product-card-name {
+  color: var(--text);
+}
+
+[data-theme="dark"] .product-card-body {
+  background: var(--surface);
+}
+
+/* ─── Buttons ─── */
+[data-theme="dark"] .btn-primary {
+  background: var(--primary);
+  box-shadow: 0 0 0 0 rgba(224, 64, 251, 0);
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--glow-primary);
+}
+
+[data-theme="dark"] .btn-outline {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+[data-theme="dark"] .btn-outline:hover {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: var(--glow-primary);
+}
+
+[data-theme="dark"] .btn-outline-dark {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+[data-theme="dark"] .btn-outline-dark:hover {
+  background: var(--accent);
+  color: var(--secondary);
+  box-shadow: var(--glow-accent);
+}
+
+/* ─── Forms ─── */
+[data-theme="dark"] .form-control {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-dark);
+  color: var(--text);
+}
+
+[data-theme="dark"] .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light), var(--glow-primary);
+}
+
+[data-theme="dark"] .form-label {
+  color: var(--text-secondary);
+}
+
+/* ─── Cart / Checkout ─── */
+[data-theme="dark"] .cart-item,
+[data-theme="dark"] .cart-summary,
+[data-theme="dark"] .checkout-section,
+[data-theme="dark"] .order-card,
+[data-theme="dark"] .profile-sidebar,
+[data-theme="dark"] .profile-section {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .summary-row {
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .summary-row.total {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .summary-row.savings {
+  color: var(--success);
+}
+
+[data-theme="dark"] .coupon-form input {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-dark);
+  color: var(--text);
+}
+
+/* ─── Product Details ─── */
+[data-theme="dark"] .pd-main-img,
+[data-theme="dark"] .delivery-info {
+  background: var(--surface-2);
+}
+
+[data-theme="dark"] .size-btn {
+  border-color: var(--border-dark);
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+[data-theme="dark"] .size-btn:hover,
+[data-theme="dark"] .size-btn.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  box-shadow: var(--glow-primary);
+}
+
+[data-theme="dark"] .qty-control {
+  border-color: var(--border-dark);
+}
+
+[data-theme="dark"] .qty-btn,
+[data-theme="dark"] .qty-value {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* ─── Auth Pages ─── */
+[data-theme="dark"] .auth-page {
+  background: radial-gradient(ellipse at top, #1a1a2e 0%, #0d0d1a 70%);
+}
+
+[data-theme="dark"] .auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--glow-primary);
+}
+
+[data-theme="dark"] .social-btn {
+  background: var(--surface-2);
+  border-color: var(--border-dark);
+  color: var(--text);
+}
+
+[data-theme="dark"] .social-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* ─── Category Pages ─── */
+[data-theme="dark"] .filter-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .filter-option {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .sort-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .sort-select {
+  background: var(--surface-2);
+  border-color: var(--border-dark);
+  color: var(--text);
+}
+
+/* ─── Pay / Checkout ─── */
+[data-theme="dark"] .pay-method,
+[data-theme="dark"] .delivery-option {
+  border-color: var(--border-dark);
+  background: var(--surface);
+}
+
+[data-theme="dark"] .pay-method.active,
+[data-theme="dark"] .delivery-option.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+[data-theme="dark"] .card-field input {
+  background: var(--surface-2);
+  border-color: var(--border-dark);
+  color: var(--text);
+}
+
+[data-theme="dark"] .upi-app {
+  border-color: var(--border-dark);
+  color: var(--text-secondary);
+  background: var(--surface-2);
+}
+
+[data-theme="dark"] .upi-app.active,
+[data-theme="dark"] .upi-app:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* ─── Footer ─── */
+[data-theme="dark"] .footer {
+  background: #0a0a15;
+  border-top: 1px solid var(--border);
+}
+
+[data-theme="dark"] .footer-links a:hover {
+  color: var(--primary);
+  text-shadow: 0 0 8px var(--primary);
+}
+
+/* ─── FAQ ─── */
+[data-theme="dark"] .faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .faq-q:hover {
+  color: var(--primary);
+}
+
+/* ─── Toasts ─── */
+[data-theme="dark"] .toast {
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  box-shadow: var(--glow-primary);
+}
+
+/* ─── Newsletter ─── */
+[data-theme="dark"] .newsletter-section {
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 100%);
+  border-top: 1px solid var(--border);
+}
+
+/* ─── Contact / About / Pages ─── */
+[data-theme="dark"] .contact-info-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .review-card,
+[data-theme="dark"] .order-timeline {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .contact-icon {
+  background: var(--primary-light);
+}
+
+/* ─── Scrollbar ─── */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--secondary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+}
+
+/* ─── Bottom Mobile Nav ─── */
+[data-theme="dark"] .mobile-bottom-nav {
+  background: rgba(13, 13, 26, 0.95);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+}
+
+[data-theme="dark"] .mobile-bottom-nav-item {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .mobile-bottom-nav-item.active,
+[data-theme="dark"] .mobile-bottom-nav-item:hover {
+  color: var(--primary);
+}
+
+/* ─── Chip / Tags ─── */
+[data-theme="dark"] .chip {
+  background: var(--surface-2);
+  border-color: var(--border-dark);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .chip.active,
+[data-theme="dark"] .chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+/* ─── Back to Top ─── */
+[data-theme="dark"] #back-to-top {
+  background: var(--primary);
+  box-shadow: var(--glow-primary);
+}
+
+/* ─── Profile Nav ─── */
+[data-theme="dark"] .profile-nav-link:hover,
+[data-theme="dark"] .profile-nav-link.active {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* ─── Loading Screen ─── */
+[data-theme="dark"] #loading-screen {
+  background: var(--bg);
+}
+
+/* ─── Neon Glow Pulse on hover for interactive elements ─── */
+[data-theme="dark"] .btn-primary:active {
+  transform: scale(0.97);
+}
+
+[data-theme="dark"] a.nav-action-btn:hover .nav-badge {
+  box-shadow: var(--glow-primary);
+}
+
+/* ─── Gradient text utility ─── */
+[data-theme="dark"] .gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Neon divider ─── */
+[data-theme="dark"] .section-divider,
+[data-theme="dark"] .section-divider-left {
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  box-shadow: var(--glow-primary);
+}
+
+/* ─── Hero sections in dark mode ─── */
+[data-theme="dark"] .page-header {
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+[data-theme="dark"] .about-hero {
+  background: radial-gradient(ellipse at center, #1a0a2e 0%, #0d0d1a 100%);
+}
+
+[data-theme="dark"] .flash-sale {
+  background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 100%);
+  border: 1px solid var(--border);
+}
+
+[data-theme="dark"] .countdown-block {
+  background: var(--primary);
+  box-shadow: var(--glow-primary);
+}
+
+/* ─── Success page ─── */
+[data-theme="dark"] .success-animation {
+  background: linear-gradient(135deg, var(--success), #00bfa5);
+  box-shadow: var(--glow-success);
+}
+
+[data-theme="dark"] .timeline-dot {
+  background: var(--success);
+  box-shadow: var(--glow-success);
+}

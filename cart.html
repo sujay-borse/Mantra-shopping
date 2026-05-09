@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Bag | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body class="pt-navbar bg-white">
+  
+  <div class="breadcrumb container">
+    <a href="home.html">Home</a>
+    <span class="breadcrumb-sep">/</span>
+    <span class="breadcrumb-current">Shopping Bag</span>
+  </div>
+
+  <div id="cartContent">
+    <!-- Populated by JS -->
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    let currentDiscount = 0;
+
+    function renderCart() {
+      const items = Store.cart.items();
+      const container = document.getElementById('cartContent');
+      
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-cart-shopping empty-state-icon"></i>
+            <h3>Your Bag is Empty!</h3>
+            <p>Looks like you haven't added anything to your bag yet.</p>
+            <a href="home.html" class="btn btn-primary btn-lg">Continue Shopping</a>
+          </div>
+        `;
+        return;
+      }
+      
+      let itemsHTML = '';
+      let mrpTotal = 0;
+      let actualTotal = 0;
+      
+      items.forEach(item => {
+        mrpTotal += item.original * item.qty;
+        actualTotal += item.price * item.qty;
+        
+        itemsHTML += `
+          <div class="cart-item">
+            <div class="cart-item-img" onclick="window.location.href='product-details.html?id=${item.id}'" style="cursor:pointer;">
+              <img src="${item.img}" alt="${item.name}">
+            </div>
+            <div>
+              <div class="cart-item-brand">${item.brand}</div>
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-meta">Size: <b>${item.size}</b></div>
+              
+              <div class="qty-control mt-2">
+                <button class="qty-btn" onclick="Store.cart.updateQty('${item.id}', '${item.size}', ${item.qty - 1}); renderCart();">-</button>
+                <div class="qty-value">${item.qty}</div>
+                <button class="qty-btn" onclick="Store.cart.updateQty('${item.id}', '${item.size}', ${item.qty + 1}); renderCart();">+</button>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div class="cart-item-price">₹${item.price * item.qty}</div>
+              ${item.original > item.price ? `<div class="cart-item-original">₹${item.original * item.qty}</div>` : ''}
+              <button class="cart-item-remove" onclick="Store.cart.remove('${item.id}', '${item.size}'); renderCart();">REMOVE</button>
+            </div>
+          </div>
+        `;
+      });
+      
+      const discountTotal = mrpTotal - actualTotal;
+      const finalTotal = actualTotal - currentDiscount;
+      
+      container.innerHTML = `
+        <div class="cart-layout">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <h2 style="font-size:1.125rem;">Bag (${items.length} items)</h2>
+              <button class="btn btn-outline-dark btn-sm" onclick="if(confirm('Clear entire bag?')) { Store.cart.clear(); renderCart(); }">Clear All</button>
+            </div>
+            ${itemsHTML}
+          </div>
+          
+          <div>
+            <div class="cart-summary">
+              <h3>Coupons</h3>
+              <div class="coupon-form">
+                <input type="text" id="couponInput" placeholder="Enter coupon code (e.g. MANTRA10)">
+                <button class="btn btn-outline" onclick="applyCode()">Apply</button>
+              </div>
+              <p id="couponMsg" style="font-size:0.8125rem; color:var(--success); display:none;"></p>
+              
+              <h3 style="margin-top:24px;">Price Details</h3>
+              <div class="summary-row">
+                <span>Total MRP</span>
+                <span>₹${mrpTotal}</span>
+              </div>
+              <div class="summary-row savings">
+                <span>Discount on MRP</span>
+                <span>-₹${discountTotal}</span>
+              </div>
+              ${currentDiscount > 0 ? `
+              <div class="summary-row savings">
+                <span>Coupon Discount</span>
+                <span>-₹${currentDiscount}</span>
+              </div>
+              ` : ''}
+              <div class="summary-row">
+                <span>Platform Fee</span>
+                <span>FREE</span>
+              </div>
+              <div class="summary-row">
+                <span>Shipping Fee</span>
+                <span style="color:var(--success)">FREE</span>
+              </div>
+              
+              <div class="summary-row total">
+                <span>Total Amount</span>
+                <span>₹${finalTotal}</span>
+              </div>
+              
+              <button class="btn btn-primary btn-full btn-lg mt-6" onclick="proceedToCheckout()">
+                Proceed To Checkout
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function applyCode() {
+      const code = document.getElementById('couponInput').value.trim();
+      if (!code) return;
+      
+      const total = Store.cart.total();
+      const res = applyCoupon(code, total);
+      
+      const msgEl = document.getElementById('couponMsg');
+      msgEl.style.display = 'block';
+      
+      if (res.ok) {
+        currentDiscount = res.discount;
+        msgEl.textContent = res.msg;
+        msgEl.style.color = 'var(--success)';
+        renderCart(); // Re-render to update totals
+        showToast('Coupon applied successfully');
+      } else {
+        currentDiscount = 0;
+        msgEl.textContent = res.msg;
+        msgEl.style.color = 'var(--error)';
+        renderCart();
+      }
+    }
+
+    function proceedToCheckout() {
+      if (!Store.auth.isLoggedIn()) {
+        showToast('Please login to continue', 'info');
+        setTimeout(() => window.location.href = 'login.html?redirect=checkout.html', 1500);
+      } else {
+        // Save the discount to localStorage so checkout can pick it up
+        localStorage.setItem('tempDiscount', currentDiscount);
+        window.location.href = 'checkout.html';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCart();
+    });
+  </script>
+</body>
+</html>

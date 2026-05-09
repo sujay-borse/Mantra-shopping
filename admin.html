@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Mantra</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/dark-theme.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .admin-layout { display:grid; grid-template-columns:220px 1fr; min-height:100vh; }
+    .admin-sidebar { background:#0f0f1e; padding:24px 0; }
+    .admin-logo { padding:0 20px 24px; font-size:1.125rem; font-weight:900; color:#FF3E6C; border-bottom:1px solid rgba(255,255,255,0.06); margin-bottom:12px; }
+    .admin-nav { display:flex; align-items:center; gap:12px; padding:11px 20px; color:rgba(255,255,255,0.55); cursor:pointer; font-size:0.9rem; border-left:3px solid transparent; transition:all 0.2s; text-decoration:none; }
+    .admin-nav:hover, .admin-nav.active { color:#fff; background:rgba(255,255,255,0.05); border-left-color:#FF3E6C; }
+    .admin-nav i { width:18px; }
+    .admin-main { background:var(--bg); padding:32px; overflow-y:auto; }
+    .admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:32px; flex-wrap:wrap; gap:12px; }
+    @media(max-width:768px) { .admin-layout { grid-template-columns:1fr; } .admin-sidebar { display:none; } }
+  </style>
+</head>
+<body>
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">⚡ Mantra Admin</div>
+    <a class="admin-nav active" onclick="adminTab('overview')"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+    <a class="admin-nav" onclick="adminTab('users')"><i class="fa-solid fa-users"></i> Users</a>
+    <a class="admin-nav" onclick="adminTab('sellers')"><i class="fa-solid fa-store"></i> Sellers</a>
+    <a class="admin-nav" onclick="adminTab('products')"><i class="fa-solid fa-boxes-stacked"></i> Products</a>
+    <a class="admin-nav" onclick="adminTab('orders')"><i class="fa-solid fa-bag-shopping"></i> Orders</a>
+    <a class="admin-nav" onclick="adminTab('revenue')"><i class="fa-solid fa-chart-line"></i> Revenue</a>
+    <a class="admin-nav" onclick="adminTab('settings')"><i class="fa-solid fa-sliders"></i> Settings</a>
+    <div style="margin-top:auto;padding:20px;">
+      <a href="home.html" class="admin-nav"><i class="fa-solid fa-arrow-left"></i> Back to Store</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <h1 style="font-size:1.5rem;font-weight:800;">Admin Dashboard</h1>
+        <p style="color:var(--text-muted);">Platform overview & management</p>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <button class="theme-toggle" id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+      </div>
+    </div>
+
+    <!-- Overview -->
+    <div id="admin-overview">
+      <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#EEF0FF"><i class="fa-solid fa-users" style="color:#7c4dff"></i></div>
+          <div class="stat-tile-value">12,841</div>
+          <div class="stat-tile-label">Total Users</div>
+          <div class="stat-tile-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +312 this week</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#E8F8EE"><i class="fa-solid fa-store" style="color:#00B057"></i></div>
+          <div class="stat-tile-value">384</div>
+          <div class="stat-tile-label">Active Sellers</div>
+          <div class="stat-tile-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +18 this month</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#FFE8EE"><i class="fa-solid fa-indian-rupee-sign" style="color:#FF3E6C"></i></div>
+          <div class="stat-tile-value">₹84.2L</div>
+          <div class="stat-tile-label">Platform Revenue</div>
+          <div class="stat-tile-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +22% MoM</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-tile-icon" style="background:#FFF3E0"><i class="fa-solid fa-bag-shopping" style="color:#F5A623"></i></div>
+          <div class="stat-tile-value">9,230</div>
+          <div class="stat-tile-label">Total Orders</div>
+          <div class="stat-tile-trend up"><i class="fa-solid fa-arrow-trend-up"></i> +540 this week</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-6 mt-6">
+        <div class="chart-card">
+          <h3>Platform Revenue (₹L)</h3>
+          <canvas id="adminRevenueChart" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Category Sales Share</h3>
+          <canvas id="adminCatChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Users -->
+    <div id="admin-users" style="display:none;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <h2 style="font-size:1.25rem;font-weight:700;">User Management</h2>
+        <input type="text" class="form-control" placeholder="Search users..." style="max-width:260px;" oninput="filterAdminTable(this.value,'adminUsersTable')">
+      </div>
+      <div class="chart-card">
+        <table class="data-table" id="adminUsersTable">
+          <thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Orders</th><th>Joined</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>Rahul Sharma</td><td>rahul@email.com</td><td><span style="color:#00B057;font-weight:600;">Pro</span></td><td>14</td><td>Jan 2026</td><td><button class="btn btn-outline btn-sm">View</button></td></tr>
+            <tr><td>Priya Patel</td><td>priya@email.com</td><td>Basic</td><td>7</td><td>Feb 2026</td><td><button class="btn btn-outline btn-sm">View</button></td></tr>
+            <tr><td>Amit Kumar</td><td>amit@email.com</td><td><span style="color:#FF3E6C;font-weight:600;">Premium</span></td><td>32</td><td>Nov 2025</td><td><button class="btn btn-outline btn-sm">View</button></td></tr>
+            <tr><td>Sneha Joshi</td><td>sneha@email.com</td><td>Basic</td><td>3</td><td>Mar 2026</td><td><button class="btn btn-outline btn-sm">View</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sellers -->
+    <div id="admin-sellers" style="display:none;">
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:20px;">Seller Management</h2>
+      <div class="chart-card">
+        <table class="data-table">
+          <thead><tr><th>Store</th><th>Owner</th><th>Products</th><th>Revenue</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><b>Style Hub</b></td><td>Rohan Mehta</td><td>42</td><td>₹1.2L</td><td><span style="color:#00B057;font-weight:600;">Active</span></td><td><button class="btn btn-outline btn-sm">Manage</button></td></tr>
+            <tr><td><b>Fashion Kart</b></td><td>Anita Singh</td><td>18</td><td>₹64K</td><td><span style="color:#00B057;font-weight:600;">Active</span></td><td><button class="btn btn-outline btn-sm">Manage</button></td></tr>
+            <tr><td><b>KidsWear Co.</b></td><td>Vijay Gupta</td><td>9</td><td>₹28K</td><td><span style="color:#F5A623;font-weight:600;">Review</span></td><td><button class="btn btn-primary btn-sm">Approve</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Products Moderation -->
+    <div id="admin-products" style="display:none;">
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:20px;">Product Moderation</h2>
+      <div class="chart-card">
+        <table class="data-table">
+          <thead><tr><th>Product</th><th>Seller</th><th>Category</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td>Men Slim Fit Jeans</td><td>Style Hub</td><td>Men</td><td>₹1,899</td><td><span style="color:#00B057;font-weight:600;">Live</span></td><td><button class="btn btn-outline btn-sm">Review</button></td></tr>
+            <tr><td>Organic Face Cream</td><td>GlowBeauty</td><td>Beauty</td><td>₹899</td><td><span style="color:#F5A623;font-weight:600;">Pending</span></td><td><button class="btn btn-primary btn-sm">Approve</button></td></tr>
+            <tr><td>Kids Winter Jacket</td><td>KidsWear Co.</td><td>Kids</td><td>₹1,299</td><td><span style="color:#F5A623;font-weight:600;">Pending</span></td><td><button class="btn btn-primary btn-sm">Approve</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div id="admin-orders" style="display:none;">
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:20px;">All Orders</h2>
+      <div class="chart-card">
+        <table class="data-table">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Seller</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody>
+            <tr><td>ORD1001</td><td>Rahul Sharma</td><td>Style Hub</td><td>₹1,899</td><td><span style="color:#00B057;font-weight:600;">Delivered</span></td><td>05 May 2026</td></tr>
+            <tr><td>ORD1002</td><td>Priya Patel</td><td>Fashion Kart</td><td>₹1,999</td><td><span style="color:#7c4dff;font-weight:600;">Shipped</span></td><td>06 May 2026</td></tr>
+            <tr><td>ORD1003</td><td>Amit Kumar</td><td>Style Hub</td><td>₹3,999</td><td><span style="color:#F5A623;font-weight:600;">Processing</span></td><td>07 May 2026</td></tr>
+            <tr><td>ORD1004</td><td>Sneha Joshi</td><td>GlowBeauty</td><td>₹1,950</td><td><span style="color:#00B057;font-weight:600;">Delivered</span></td><td>07 May 2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Revenue -->
+    <div id="admin-revenue" style="display:none;">
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:24px;">Revenue Analytics</h2>
+      <div class="chart-card">
+        <h3>Monthly Platform Revenue</h3>
+        <canvas id="adminMonthlyChart" height="180"></canvas>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div id="admin-settings" style="display:none;">
+      <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:24px;">Platform Settings</h2>
+      <div class="chart-card" style="max-width:600px;">
+        <div class="form-group">
+          <label class="form-label">Platform Commission (%)</label>
+          <input type="number" class="form-control" value="15">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Minimum Withdrawal (₹)</label>
+          <input type="number" class="form-control" value="500">
+        </div>
+        <div class="form-group">
+          <label class="form-label">OpenAI API Key</label>
+          <input type="password" class="form-control" placeholder="sk-...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Razorpay Key ID</label>
+          <input type="password" class="form-control" placeholder="rzp_live_...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Firebase Config (JSON)</label>
+          <textarea class="form-control" rows="4" placeholder='{"apiKey":"...","authDomain":"..."}'></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="showToast('Settings saved!')">Save Settings</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/store.js"></script>
+<script>
+  function adminTab(tab) {
+    document.querySelectorAll('[id^="admin-"]').forEach(el => el.style.display = 'none');
+    document.getElementById('admin-' + tab).style.display = 'block';
+    document.querySelectorAll('.admin-nav').forEach(el => el.classList.remove('active'));
+    event.target.closest('.admin-nav').classList.add('active');
+  }
+
+  function filterAdminTable(q, tableId) {
+    const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+    rows.forEach(r => r.style.display = r.textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none');
+  }
+
+  function showToast(msg, type='success') {
+    let c = document.getElementById('toast-container');
+    if (!c) { c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); }
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<i class="fa-solid fa-circle-check toast-icon"></i><span>${msg}</span>`;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', saved);
+    const tog = document.getElementById('themeToggle');
+    tog.innerHTML = saved === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    tog.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      tog.innerHTML = next === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+
+    const isDark = saved === 'dark';
+    const gc = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    const tc = isDark ? '#a0a0c8' : '#555';
+
+    new Chart(document.getElementById('adminRevenueChart'), {
+      type: 'line',
+      data: {
+        labels: ['Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'],
+        datasets: [{ label:'Revenue', data:[52,68,84,71,93,77,108,84], borderColor:'#FF3E6C', backgroundColor:'rgba(255,62,108,0.1)', borderWidth:2.5, fill:true, tension:0.4, pointRadius:4, pointBackgroundColor:'#FF3E6C' }],
+      },
+      options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:{color:gc},ticks:{color:tc}},y:{grid:{color:gc},ticks:{color:tc,callback:v=>'₹'+v+'L'}}} },
+    });
+
+    new Chart(document.getElementById('adminCatChart'), {
+      type: 'doughnut',
+      data: { labels:['Women','Men','Beauty','Kids','Living'], datasets:[{data:[32,28,18,12,10],backgroundColor:['#FF3E6C','#7c4dff','#F5A623','#00B057','#00e5ff'],borderWidth:0}] },
+      options: { responsive:true, cutout:'65%', plugins:{legend:{position:'bottom',labels:{color:tc}}} },
+    });
+
+    new Chart(document.getElementById('adminMonthlyChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [{ label:'Revenue (₹L)', data:[71,93,77,108,84,0,0,0,0,0,0,0], backgroundColor:'rgba(124,77,255,0.7)', borderRadius:6 }],
+      },
+      options: { responsive:true, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false},ticks:{color:tc}},y:{grid:{color:gc},ticks:{color:tc,callback:v=>'₹'+v+'L'}}} },
+    });
+  });
+</script>
+</body>
+</html>
