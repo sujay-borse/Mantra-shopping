@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kids' Fashion | Mantra</title>
+  <title>Men's Fashion | Mantra</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
@@ -11,20 +11,21 @@
 </head>
 <body>
   
-  <div class="cat-hero" style="background-image: url('https://source.unsplash.com/1600x400/?kids,clothing,playing');">
+  <div class="cat-hero" style="background-image: url('https://source.unsplash.com/1600x400/?men,fashion,clothing');">
     <div class="cat-hero-content container">
-      <h1>Kids' Fashion</h1>
-      <p>Cute, comfortable, and playful styles for the little ones.</p>
+      <h1>Men's Fashion</h1>
+      <p>Discover the latest trends in men's apparel, footwear, and accessories.</p>
     </div>
   </div>
 
   <div class="breadcrumb container">
-    <a href="home.html">Home</a>
+    <a href="index.html">Home</a>
     <span class="breadcrumb-sep">/</span>
-    <span class="breadcrumb-current">Kids</span>
+    <span class="breadcrumb-current">Men</span>
   </div>
 
   <div class="cat-page">
+    <!-- Filter Sidebar -->
     <aside class="filter-sidebar" id="filterSidebar">
       <div class="filter-title">
         <span>FILTERS</span>
@@ -33,12 +34,14 @@
       
       <div class="filter-group">
         <div class="filter-group-title">Brands</div>
-        <label class="filter-option"><input type="checkbox" value="Gini & Jony"> Gini & Jony</label>
-        <label class="filter-option"><input type="checkbox" value="Allen Solly Junior"> Allen Solly Junior</label>
-        <label class="filter-option"><input type="checkbox" value="Mothercare"> Mothercare</label>
-        <label class="filter-option"><input type="checkbox" value="H&M Kids"> H&M Kids</label>
-        <label class="filter-option"><input type="checkbox" value="United Colors of Benetton"> UCB</label>
-        <label class="filter-option"><input type="checkbox" value="Pepe Jeans"> Pepe Jeans</label>
+        <label class="filter-option"><input type="checkbox" value="U.S. Polo Assn."> U.S. Polo Assn.</label>
+        <label class="filter-option"><input type="checkbox" value="Puma"> Puma</label>
+        <label class="filter-option"><input type="checkbox" value="Levis"> Levis</label>
+        <label class="filter-option"><input type="checkbox" value="Tommy Hilfiger"> Tommy Hilfiger</label>
+        <label class="filter-option"><input type="checkbox" value="H&M"> H&M</label>
+        <label class="filter-option"><input type="checkbox" value="Jack & Jones"> Jack & Jones</label>
+        <label class="filter-option"><input type="checkbox" value="Nike"> Nike</label>
+        <label class="filter-option"><input type="checkbox" value="Adidas"> Adidas</label>
       </div>
       
       <div class="filter-group">
@@ -59,6 +62,7 @@
       </div>
     </aside>
 
+    <!-- Products Area -->
     <main class="products-area">
       <div class="sort-bar">
         <button class="filter-toggle-btn" id="mobileFilterBtn">
@@ -74,7 +78,9 @@
         </select>
       </div>
       
-      <div class="products-grid" id="productsGrid"></div>
+      <div class="products-grid" id="productsGrid">
+        <!-- Injected via JS -->
+      </div>
     </main>
   </div>
 
@@ -88,14 +94,16 @@
     document.addEventListener('DOMContentLoaded', () => {
       initMobileFilter();
       
-      const manager = new ProductManager(getProductsByCategory('kids'), 'productsGrid');
+      const manager = new ProductManager(getProductsByCategory('men'), 'productsGrid');
       manager.render();
       
+      // Bind Sort
       document.getElementById('sortSelect').addEventListener('change', (e) => {
         manager.sortBy = e.target.value;
         manager.applyFilters();
       });
       
+      // Bind Price
       const priceRange = document.getElementById('priceRange');
       const priceVal = document.getElementById('priceVal');
       priceRange.addEventListener('input', (e) => {
@@ -104,6 +112,7 @@
         manager.applyFilters();
       });
       
+      // Bind Brands
       document.querySelectorAll('.filter-group input[type="checkbox"]').forEach(cb => {
         cb.addEventListener('change', () => {
           const brands = Array.from(document.querySelectorAll('.filter-group input[type="checkbox"]:checked')).map(el => el.value);
@@ -112,6 +121,7 @@
         });
       });
       
+      // Bind Rating
       document.querySelectorAll('input[name="rating"]').forEach(rb => {
         rb.addEventListener('change', (e) => {
           manager.filters.rating = parseInt(e.target.value);
@@ -119,6 +129,7 @@
         });
       });
       
+      // Mobile Search Binding (if using navbar search on this page)
       document.querySelectorAll('.nav-search-input').forEach(input => {
         input.addEventListener('input', (e) => {
           manager.filters.search = e.target.value;

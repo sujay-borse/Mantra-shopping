@@ -1,89 +1,177 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantra | Premium Fashion & Lifestyle</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">`n  <link rel="stylesheet" href="css/dark-theme.css">>
+</head>
+<body>
+  
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loader-logo">Mantra<span style="color:var(--accent)">.</span></div>
+    <div class="loader-bar"><div class="loader-bar-inner"></div></div>
+  </div>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.13.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.13.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.13.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+  <!-- Hero Slider -->
+  <section class="hero">
+    <div class="slide active" style="background-image: url('https://source.unsplash.com/1600x900/?fashion,model');">
+      <div class="slide-content">
+        <div class="slide-subtitle animate-fadeInUp">New Collection 2024</div>
+        <h1 class="slide-title animate-fadeInUp" style="animation-delay: 0.1s;">ELEVATE YOUR EVERYDAY STYLE</h1>
+        <p class="slide-desc animate-fadeInUp" style="animation-delay: 0.2s;">Discover the latest trends in fashion and accessories. Shop our exclusive new arrivals curated just for you.</p>
+        <div class="slide-actions animate-fadeInUp" style="animation-delay: 0.3s;">
+          <a href="women.html" class="btn btn-primary btn-lg">Shop Women</a>
+          <a href="men.html" class="btn btn-outline btn-lg" style="color:#fff; border-color:#fff;">Shop Men</a>
+        </div>
+      </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    
+    <div class="slide" style="background-image: url('https://source.unsplash.com/1600x900/?beauty,makeup');">
+      <div class="slide-content">
+        <div class="slide-subtitle">Premium Beauty</div>
+        <h1 class="slide-title">GLOW LIKE NEVER BEFORE</h1>
+        <p class="slide-desc">Top global brands and exclusive cosmetic collections to keep you shining all day long.</p>
+        <div class="slide-actions">
+          <a href="beauty.html" class="btn btn-primary btn-lg">Explore Beauty</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slide" style="background-image: url('https://source.unsplash.com/1600x900/?living,interior');">
+      <div class="slide-content">
+        <div class="slide-subtitle">Home & Living</div>
+        <h1 class="slide-title">REVAMP YOUR SPACE</h1>
+        <p class="slide-desc">Aesthetic decor, premium furnishings, and cozy living essentials for the modern home.</p>
+        <div class="slide-actions">
+          <a href="living.html" class="btn btn-primary btn-lg">Shop Home</a>
+        </div>
+      </div>
+    </div>
+    
+    <button class="slider-nav slider-prev"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="slider-nav slider-next"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="slider-dots">
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </section>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+  <!-- Featured Categories -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Shop by Category</h2>
+        <div class="section-divider"></div>
+      </div>
+      
+      <div class="grid grid-cols-5 gap-4" id="categoryContainer">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </section>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+  <!-- Flash Sale -->
+  <section class="flash-sale">
+    <div class="container">
+      <div class="flash-header">
+        <div class="flash-title">
+          <h2><i class="fa-solid fa-bolt" style="color:var(--accent);"></i> Flash Sale Drops</h2>
+        </div>
+        <div class="countdown" id="flashTimer"></div>
+      </div>
+      
+      <div class="grid grid-cols-4 gap-5" id="trendingContainer">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- New Arrivals -->
+  <section class="section bg-white">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">New Arrivals</h2>
+        <p>Fresh drops that you need in your wardrobe right now.</p>
+        <div class="section-divider"></div>
+      </div>
+      
+      <div class="grid grid-cols-5 gap-4" id="newArrivalsContainer">
+        <!-- Injected via JS -->
+      </div>
+      
+      <div class="text-center mt-8">
+        <a href="men.html" class="btn btn-outline-dark btn-lg">View All Products</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brands Banner -->
+  <section class="section pt-0">
+    <div class="container">
+      <div style="background:var(--bg); border-radius:var(--radius-lg); padding:48px; text-align:center;">
+        <h3 style="font-size:1.5rem; margin-bottom:24px;">Medal Worthy Brands</h3>
+        <div style="display:flex; justify-content:center; gap:40px; flex-wrap:wrap; opacity:0.6;">
+          <h2 style="font-family:serif; font-style:italic;">LEVI'S</h2>
+          <h2 style="font-weight:900;">PUMA</h2>
+          <h2 style="letter-spacing:4px;">ZARA</h2>
+          <h2 style="font-family:monospace;">H&M</h2>
+          <h2 style="font-style:italic;">BIBA</h2>
+          <h2 style="font-weight:300;">MANGO</h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter-section">
+    <div class="container">
+      <h2>Join the Mantra Club</h2>
+      <p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Enter your email address" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- JS -->
+  <script src="js/store.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initHeroSlider();
+      initCountdown('flashTimer', 14); // 14 hours
+      
+      // Render Categories
+      const catContainer = document.getElementById('categoryContainer');
+      catContainer.innerHTML = CATEGORIES.map(c => `
+        <a href="${c.id}.html" class="category-card">
+          <img src="${c.img}" alt="${c.name}" loading="lazy">
+          <div class="category-card-overlay">
+            <h3 class="category-card-name">${c.name}</h3>
+            <span class="category-card-link">Shop Now</span>
+          </div>
+        </a>
+      `).join('');
+      
+      // Render Trending
+      renderProductsGrid('trendingContainer', getTrendingProducts().slice(0, 4));
+      
+      // Render New Arrivals
+      renderProductsGrid('newArrivalsContainer', getNewArrivals());
+    });
+  </script>
+</body>
 </html>

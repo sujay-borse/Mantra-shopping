@@ -132,7 +132,7 @@
         setTimeout(() => {
           window.location.href = selectedRole === 'seller'
             ? 'seller-dashboard.html'
-            : (redirect || 'home.html');
+            : (redirect || 'index.html');
         }, 1000);
       });
     });
@@ -161,7 +161,7 @@
           Store.auth.login(data.user.name, data.user.email, data.user.role, data.token);
           showToast('Google login successful!');
           setTimeout(() => {
-            window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'home.html';
+            window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'index.html';
           }, 1000);
         } else {
           showToast(data.error || 'Google login failed (Role issue?)', 'error');

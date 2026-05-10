@@ -52,7 +52,7 @@ The backend needs secret keys (like database passwords and payment keys) to work
 ## Step 6: Run the Frontend
 Because the frontend uses plain HTML, CSS, and JS, you don't need a complex build step.
 1. Install the **Live Server** extension in VS Code.
-2. Right-click on `home.html` or `index.html` in the root folder (`Mantra clone`).
+2. Right-click on `index.html` or `index.html` in the root folder (`Mantra clone`).
 3. Click **"Open with Live Server"**.
 4. The website will automatically open in your browser (usually at `http://127.0.0.1:5500`).
 

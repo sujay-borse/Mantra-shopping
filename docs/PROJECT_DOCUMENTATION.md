@@ -4,32 +4,31 @@ This document explains the architecture, folder structure, monitoring, and deplo
 
 ## 📁 Project Structure
 
-The project is structured as a full-stack monolith where the frontend static files live at the root, and the Node.js backend lives in the `/backend` folder.
+The project is structured as a full-stack ecosystem with a clear separation between frontend assets, the Node.js backend, and Firebase Cloud Functions.
 
 ```text
 Mantra clone/
 │
-├── backend/                  # The Node.js Express server
-│   ├── config/               # Configurations (DB, Firebase)
-│   ├── middleware/           # Custom Express middlewares (Auth, Roles)
-│   ├── models/               # Mongoose Database schemas
-│   ├── routes/               # API endpoint definitions
-│   ├── server.js             # Main entry point for the backend
-│   └── .env                  # Environment variables (DO NOT SHARE)
+├── backend/                  # Node.js Express server (API)
+│   ├── config/               # Database and Firebase configurations
+│   ├── models/               # Mongoose schemas
+│   ├── routes/               # API endpoints
+│   └── server.js             # Server entry point
 │
-├── css/                      # Frontend stylesheets
-│   ├── dark-theme.css        # Core Dark Mode and Neon UI logic
-│   └── style.css             # Base structure and legacy styles
+├── public/                   # Frontend assets (served by Firebase)
+│   ├── css/                  # Stylesheets
+│   ├── js/                   # Frontend logic
+│   ├── img/                  # Images
+│   └── *.html                # HTML views (index.html, etc.)
 │
-├── js/                       # Frontend JavaScript logic
-│   ├── ai-assistant.js       # Handles chatbot UI and OpenAI API calls
-│   ├── components.js         # Reusable UI components (header, footer)
-│   ├── spin-wheel.js         # Gamification logic
-│   └── main.js               # Core app initialization
+├── functions/                # Firebase Cloud Functions
 │
-├── *.html                    # All frontend views (home, cart, checkout, admin, etc.)
-└── package.json              # Project metadata
+├── docs/                     # Documentation files
+│   └── PROJECT_DOCUMENTATION.md
+│
+└── package.json              # Ecosystem management scripts
 ```
+
 
 ## 🏗️ Architecture Overview
 
@@ -64,13 +63,15 @@ Mantra clone/
 7. **Crucial:** Go to the "Environment" tab and add EVERY key from your `.env` file manually.
 8. Deploy! Note the URL Render gives you (e.g., `https://mantra-api.onrender.com`).
 
-### Deploying the Frontend (Vercel / Netlify)
+### Deploying the Frontend (Firebase / Vercel / Netlify)
 1. Before deploying, you must update the frontend JavaScript files to point to your new backend URL instead of `http://localhost:5000`.
-2. Create an account on [Vercel](https://vercel.com/).
-3. Create a new Project and link your GitHub repository.
-4. Leave the Root Directory empty (so it serves the HTML files at the root).
-5. Vercel will automatically detect static files and deploy them.
-6. Make sure to update your backend's CORS settings (in `server.js` or via the Render environment variable `CLIENT_URL`) to allow requests from your new Vercel domain.
+2. **Firebase:** Run `npm run deploy:hosting` from the root. It will serve files from the `public/` directory.
+3. **Vercel/Netlify:**
+   - Create a new Project and link your GitHub repository.
+   - **Set the Root Directory to `public`**.
+   - Vercel/Netlify will serve the static files from that folder.
+4. Make sure to update your backend's CORS settings (in `server.js` or via the Render environment variable `CLIENT_URL`) to allow requests from your new domain.
+
 
 ---
 *Follow these guides to maintain a robust, secure, and production-ready application.*

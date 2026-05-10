@@ -12,7 +12,7 @@
 <body class="pt-navbar">
   
   <div class="breadcrumb container">
-    <a href="home.html">Home</a>
+    <a href="index.html">Home</a>
     <span class="breadcrumb-sep">/</span>
     <a href="#" id="bcCat">Category</a>
     <span class="breadcrumb-sep">/</span>
@@ -118,13 +118,13 @@
       const productId = urlParams.get('id');
       
       if (!productId) {
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
         return;
       }
       
       const product = getProduct(productId);
       if (!product) {
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
         return;
       }
       

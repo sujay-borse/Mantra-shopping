@@ -3,12 +3,12 @@ function renderNavbar() {
   const navHTML = `
     <nav class="navbar">
       <div class="nav-inner">
-        <a href="home.html" class="nav-logo">
+        <a href="index.html" class="nav-logo">
           <span class="nav-logo-text">Mantra<span class="nav-logo-dot">.</span></span>
         </a>
         
         <div class="nav-links">
-          <a href="home.html" class="nav-link">Home</a>
+          <a href="index.html" class="nav-link">Home</a>
           <a href="men.html" class="nav-link">Men</a>
           <a href="women.html" class="nav-link">Women</a>
           <a href="kids.html" class="nav-link">Kids</a>
@@ -56,7 +56,7 @@ function renderNavbar() {
         <input type="text" class="nav-search-input" placeholder="Search...">
       </div>
       <div class="mobile-menu-links">
-        <a href="home.html" class="mobile-menu-link"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="index.html" class="mobile-menu-link"><i class="fa-solid fa-house"></i> Home</a>
         <a href="men.html" class="mobile-menu-link"><i class="fa-solid fa-mars"></i> Men</a>
         <a href="women.html" class="mobile-menu-link"><i class="fa-solid fa-venus"></i> Women</a>
         <a href="kids.html" class="mobile-menu-link"><i class="fa-solid fa-child"></i> Kids</a>
@@ -72,7 +72,7 @@ function renderNavbar() {
   document.body.insertAdjacentHTML('afterbegin', navHTML);
 
   // Active link
-  const currentUrl = window.location.pathname.split('/').pop() || 'home.html';
+  const currentUrl = window.location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.nav-link').forEach(link => {
     if (link.getAttribute('href') === currentUrl) link.classList.add('active');
   });
@@ -151,12 +151,12 @@ function renderNavbar() {
 // Mobile bottom nav
 function renderBottomNav() {
   if (document.getElementById('mobileBottomNav')) return;
-  const cur = window.location.pathname.split('/').pop() || 'home.html';
+  const cur = window.location.pathname.split('/').pop() || 'index.html';
   const nav = document.createElement('nav');
   nav.id = 'mobileBottomNav';
   nav.className = 'mobile-bottom-nav';
   const links = [
-    { href: 'home.html', icon: 'fa-house', label: 'Home' },
+    { href: 'index.html', icon: 'fa-house', label: 'Home' },
     { href: 'search.html', icon: 'fa-magnifying-glass', label: 'Search' },
     { href: 'spin-wheel.html', icon: 'fa-gift', label: 'Spin' },
     { href: 'cart.html', icon: 'fa-bag-shopping', label: 'Bag', badge: 'cart-count' },
@@ -193,7 +193,7 @@ function renderFooter() {
     <footer class="footer">
       <div class="footer-grid">
         <div>
-          <a href="home.html" class="nav-logo mb-3">
+          <a href="index.html" class="nav-logo mb-3">
             <span class="nav-logo-text">Mantra<span style="color:var(--primary);">.</span></span>
           </a>
           <p class="footer-brand-desc">Your ultimate destination for premium fashion and lifestyle. Discover the latest trends, curated styles, and unparalleled quality.</p>

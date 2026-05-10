@@ -29,11 +29,19 @@ Welcome to **Mantra**, a premium, full-stack, AI-powered e-commerce ecosystem. M
 
 ## 📂 Project Navigation
 
-To get started with setting up, understanding, and running the project, please refer to the comprehensive documentation provided in this repository:
+To get started with setting up, understanding, and running the project, please refer to the comprehensive documentation provided in the `docs/` folder:
 
-1. **[Setup Guide](./SETUP_GUIDE.md):** Step-by-step instructions to run the project locally. Ideal for developers and friends!
-2. **[API Setup Guide](./API_SETUP.md):** Detailed explanations on how to get all necessary API keys (Firebase, MongoDB, Razorpay, OpenAI).
-3. **[Project Documentation](./PROJECT_DOCUMENTATION.md):** In-depth architectural overview, folder structure, security practices, and deployment guides.
+1. **[Setup Guide](./docs/SETUP_GUIDE.md):** Step-by-step instructions to run the project locally.
+2. **[API Setup Guide](./docs/API_SETUP.md):** Detailed explanations on how to get all necessary API keys.
+3. **[Project Documentation](./docs/PROJECT_DOCUMENTATION.md):** In-depth architectural overview, folder structure, security practices, and deployment guides.
+
+### Directory Structure
+
+- `backend/`: Node.js Express server and API logic.
+- `public/`: Frontend static files (HTML, CSS, JS, Images). Served via Firebase Hosting.
+- `functions/`: Firebase Cloud Functions.
+- `docs/`: Technical documentation and setup guides.
+
 
 ---
 *Built with ❤️ for a modern e-commerce experience.*

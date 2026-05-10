@@ -137,7 +137,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       if (Store.auth.isLoggedIn()) {
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
         return;
       }
 
@@ -154,7 +154,7 @@
         Store.auth.login(name, email, selectedRole || 'user');
         showToast(`Welcome to Mantra, ${name}! 🎉`);
         setTimeout(() => {
-          window.location.href = selectedRole === 'seller' ? 'seller-dashboard.html' : 'home.html';
+          window.location.href = selectedRole === 'seller' ? 'seller-dashboard.html' : 'index.html';
         }, 1200);
       });
     });
@@ -183,7 +183,7 @@
           Store.auth.login(data.user.name, data.user.email, data.user.role, data.token);
           showToast(`Welcome to Mantra, ${data.user.name}! 🎉`);
           setTimeout(() => {
-            window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'home.html';
+            window.location.href = data.user.role === 'seller' ? 'seller-dashboard.html' : 'index.html';
           }, 1200);
         } else {
           showToast(data.error || 'Google signup failed (Role issue?)', 'error');

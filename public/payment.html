@@ -12,7 +12,7 @@
 <body class="pt-navbar bg-bg">
   
   <div class="breadcrumb container">
-    <a href="home.html">Home</a>
+    <a href="index.html">Home</a>
     <span class="breadcrumb-sep">/</span>
     <span class="breadcrumb-current">Payment</span>
   </div>
@@ -118,7 +118,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       if (!Store.auth.isLoggedIn() || Store.cart.items().length === 0) {
-        window.location.href = 'home.html';
+        window.location.href = 'index.html';
         return;
       }
 

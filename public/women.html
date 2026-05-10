@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home & Living | Mantra</title>
+  <title>Women's Fashion | Mantra</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
@@ -11,17 +11,17 @@
 </head>
 <body>
   
-  <div class="cat-hero" style="background-image: url('https://source.unsplash.com/1600x400/?interior,decor,living');">
+  <div class="cat-hero" style="background-image: url('https://source.unsplash.com/1600x400/?women,fashion,clothing');">
     <div class="cat-hero-content container">
-      <h1>Home & Living</h1>
-      <p>Elevate your space with premium home decor and furnishings.</p>
+      <h1>Women's Fashion</h1>
+      <p>Explore exclusive collections, top brands, and trendy styles for every occasion.</p>
     </div>
   </div>
 
   <div class="breadcrumb container">
-    <a href="home.html">Home</a>
+    <a href="index.html">Home</a>
     <span class="breadcrumb-sep">/</span>
-    <span class="breadcrumb-current">Living</span>
+    <span class="breadcrumb-current">Women</span>
   </div>
 
   <div class="cat-page">
@@ -33,12 +33,14 @@
       
       <div class="filter-group">
         <div class="filter-group-title">Brands</div>
-        <label class="filter-option"><input type="checkbox" value="Home Centre"> Home Centre</label>
-        <label class="filter-option"><input type="checkbox" value="Bombay Dyeing"> Bombay Dyeing</label>
-        <label class="filter-option"><input type="checkbox" value="Portico New York"> Portico</label>
-        <label class="filter-option"><input type="checkbox" value="Spaces"> Spaces</label>
-        <label class="filter-option"><input type="checkbox" value="D'Decor"> D'Decor</label>
-        <label class="filter-option"><input type="checkbox" value="Chumbak"> Chumbak</label>
+        <label class="filter-option"><input type="checkbox" value="Biba"> Biba</label>
+        <label class="filter-option"><input type="checkbox" value="Vero Moda"> Vero Moda</label>
+        <label class="filter-option"><input type="checkbox" value="Mango"> Mango</label>
+        <label class="filter-option"><input type="checkbox" value="Zara"> Zara</label>
+        <label class="filter-option"><input type="checkbox" value="W"> W</label>
+        <label class="filter-option"><input type="checkbox" value="Forever 21"> Forever 21</label>
+        <label class="filter-option"><input type="checkbox" value="H&M"> H&M</label>
+        <label class="filter-option"><input type="checkbox" value="Sassafras"> Sassafras</label>
       </div>
       
       <div class="filter-group">
@@ -88,7 +90,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       initMobileFilter();
       
-      const manager = new ProductManager(getProductsByCategory('living'), 'productsGrid');
+      const manager = new ProductManager(getProductsByCategory('women'), 'productsGrid');
       manager.render();
       
       document.getElementById('sortSelect').addEventListener('change', (e) => {

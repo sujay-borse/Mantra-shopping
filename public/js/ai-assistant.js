@@ -20,7 +20,7 @@
   const RULES = [
     { match: /(gift|present|birthday)/i, reply: '🎁 Great choice! For gifts, check out our <a href="gift-cards.html" style="color:#7c4dff">Gift Cards</a> or explore <a href="women.html" style="color:#7c4dff">Women\'s</a> and <a href="living.html" style="color:#7c4dff">Home & Living</a> collections — always a hit!' },
     { match: /(size|fit|measurement)/i, reply: '📏 Our standard sizing: S (36), M (38), L (40), XL (42), XXL (44). For footwear, we follow Indian sizing. When in doubt, go one size up for a relaxed fit!' },
-    { match: /(deal|offer|discount|sale|coupon)/i, reply: '🔥 Hot deals live now! Use coupon <b>MANTRA10</b> for 10% off or <b>SAVE20</b> for 20% off on orders above ₹1999. Check the <a href="home.html#flash" style="color:#7c4dff">Flash Sale</a> section too!' },
+    { match: /(deal|offer|discount|sale|coupon)/i, reply: '🔥 Hot deals live now! Use coupon <b>MANTRA10</b> for 10% off or <b>SAVE20</b> for 20% off on orders above ₹1999. Check the <a href="index.html#flash" style="color:#7c4dff">Flash Sale</a> section too!' },
     { match: /(track|order|status|delivery)/i, reply: '📦 You can track your order on the <a href="track-order.html" style="color:#7c4dff">Track Order</a> page. Enter your Order ID and email. Standard delivery: 3-5 days. Express: 1-2 days.' },
     { match: /(return|refund|exchange)/i, reply: '↩️ We offer a hassle-free 14-day return policy. Visit <a href="returns.html" style="color:#7c4dff">Returns & Exchanges</a> to start a return. Refunds are processed in 5-7 business days.' },
     { match: /(men|shirt|jeans|jacket)/i, reply: '👔 Explore our <a href="men.html" style="color:#7c4dff">Men\'s Collection</a> — T-shirts from ₹699, jeans from ₹1899, and jackets from ₹4599. All top brands!' },
